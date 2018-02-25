@@ -4,7 +4,8 @@ Rails.application.routes.draw do
 				resources :quizzes
 		end
 
-		post 'auth/login', to: 'authentication#authenticate'
-
-		post 'signup', to: 'users#create'
+		post 'auth/login_user', to: 'authentication#authenticate_user'
+		post 'auth/login_student', to: 'authentication#authenticate_student'
+		post 'signup_user', to: 'users#create'
+		post 'signup_student', to: 'students#create'
 end

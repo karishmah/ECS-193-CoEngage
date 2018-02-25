@@ -1,22 +1,23 @@
 require 'byebug'
-class UsersController < ApplicationController
+
+class StudentsController < ApplicationController
 	# POST /signup
 	# return authenticated token upon signup
-	skip_before_action :authorize_request, only: :create
+	skip_before_action :authorize_request(1), only: :create
 
 	def create
-		user = User.create!(user_params)
-		auth_token = AuthenticateUser.new(user.email, user.password).call
+		student = Student.create!(student_params)
+		auth_token = AuthenticateStudent.new(student.email, student.password).call
 		response = { message: Message.account_created, auth_token: auth_token }
-		#response = { debug: "FUCKTHIS", auth_token: auth_token }
 		json_response(response, :created)
 	end
 
 	private
 
-	def user_params
+	def student_params
 		params.permit(
 			:name,
+			:sid,
 			:email,
 			:password,
 			:password_confirmation

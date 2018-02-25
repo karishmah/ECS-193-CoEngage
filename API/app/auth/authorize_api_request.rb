@@ -1,4 +1,5 @@
 # app/auth/authorize_api_request.rb
+require 'byebug'
 class AuthorizeApiRequest
 	def initialize(headers = {})
 		@headers = headers
@@ -6,26 +7,48 @@ class AuthorizeApiRequest
 
 	# Service entry point - return valid user object
 	def call
-		{
-			user: user
-		}
-	end
+		{ user: user}
+		rescue ActiveRecord::RecordNotFound => e
+			byebug
+		{user: student}
+		rescue ActiveRecord::RecordNotFound => e
+				# raise custom error
+			raise(
+				ExceptionHandler::InvalidToken,
+				("#{Message.invalid_token} #{e.message}")
+			)
+end
+
+
 
 	private
 
 	attr_reader :headers
 
-	def user
-		# check if user is in the database
-		# memoize user object
-		@user ||= User.find(decoded_auth_token[:user_id]) if decoded_auth_token
-		# handle user not found
+	def student
+		# check if student is in the database
+		# memoize student object
+		@student ||= Student.find(decoded_auth_token[:student_id]) if decoded_auth_token
+		# handle student not found
 	rescue ActiveRecord::RecordNotFound => e
 		# raise custom error
 		raise(
 			ExceptionHandler::InvalidToken,
 			("#{Message.invalid_token} #{e.message}")
 		)
+	end
+
+
+	def user
+		# check if user is in the database
+		# memoize user object
+		@user ||= User.find(decoded_auth_token[:user_id]) if decoded_auth_token
+		# handle user not found
+	#rescue ActiveRecord::RecordNotFound => e
+	#	raise(
+	#		ExceptionHandler::InvalidToken,
+	#		("#{Message.invalid_token} #{e.message}")
+	#	)
 	end
 
 	# decode authentication token
