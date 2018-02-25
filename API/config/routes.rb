@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 		# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 		resources :courses do
-				resources :quizzes
+				resources :quizzes do
+					resources :posts
+				end
 		end
 
 		post 'auth/login_user', to: 'authentication#authenticate_user'

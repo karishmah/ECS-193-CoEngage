@@ -120,10 +120,9 @@ RSpec.describe 'Quizs API' do
 		end
 	end
 
-	# Test suite for DELETE /courses/:id
-	describe 'DELETE /courses/:id' do
+	# Test suite for DELETE /courses/:course_id/quizzes/:id
+	describe 'DELETE /courses/:course_id/quizzes/:id' do
 		before { delete "/courses/#{course_id}/quizzes/#{id}", params: {}, headers: headers }
-
 		it 'returns status code 204' do
 			expect(response).to have_http_status(204)
 		end

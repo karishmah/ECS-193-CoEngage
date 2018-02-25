@@ -1,5 +1,4 @@
 # app/auth/authorize_api_request.rb
-require 'byebug'
 class AuthorizeApiRequest
 	def initialize(headers = {})
 		@headers = headers
@@ -9,7 +8,6 @@ class AuthorizeApiRequest
 	def call
 		{ user: user}
 		rescue ActiveRecord::RecordNotFound => e
-			byebug
 		{user: student}
 		rescue ActiveRecord::RecordNotFound => e
 				# raise custom error
