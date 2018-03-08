@@ -29,15 +29,15 @@ Things you may want to cover:
 #### 			prefix Verb 	URI Pattern													Action
 * course_quiz_posts 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts(.:format) 		posts#index 
-	* 				   POST 	/courses/:course_id/quizzes/:quiz_id/posts(.:format) 		posts#create
+	* POST 	/courses/:course_id/quizzes/:quiz_id/posts(.:format) 		posts#create
 * course_quiz_post 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#show
 	* PATCH 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#update
 	* PUT 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#update
 	* DELETE 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#destroy
-	* course_quizze	
+	* course_quizzes	
 	*  GET 		/courses/:course_id/quizzes(.:format) 						quizzes#index
-	*               POST 	/courses/:course_id/quizzes(.:format) 						quizzes#create
+	* POST 	/courses/:course_id/quizzes(.:format) 						quizzes#create
 * course_quiz	
 	* GET 		/courses/:course_id/quizzes/:id(.:format) 					quizzes#show
 	* PATCH 	/courses/:course_id/quizzes/:id(.:format) 					quizzes#update
