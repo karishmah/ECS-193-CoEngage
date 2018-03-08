@@ -1,0 +1,3 @@
+#!/bin/bash
+printf "Welcome to CoEngage!\n\n You have been registered for $1 by $2. You're temporary password for login is: $3\nYou can change it after logging in with the CoEngage App" |  mail -s "CoEngage registration" $4
+echo Email sent to $4

@@ -10,6 +10,5 @@ class ApplicationController < ActionController::API
 
 	def authorize_request
 		@current_user = (AuthorizeApiRequest.new(request.headers).call)[:user]
-		#@current_student = (AuthorizeApiRequest.new(request.headers).call_student)[:student]
 	end
 end
