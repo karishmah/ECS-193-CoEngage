@@ -1,9 +1,4 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
+# CoEngage Server API
 
 * Ruby version
 	2.4
@@ -20,6 +15,15 @@ Things you may want to cover:
 * Database initialization
 
 * How to run the test suite
+	* The Unit Testing is written using the rspec Ruby Gem.
+	* In order to run the tests run ``` rspec ``` while in the API directory
+	* For running a test server locally, use ``` rails server ``` while in the 
+		API directory.
+		* to get a feel for the different http requests, httpie is an extremely
+		  useful command line tool to test different parameters
+```
+$ http --print HBhb POST localhost:3000/signup_user  name="Lilliana Graham" email="foo@bar.com" password="foobar" password_confirmation="foobar"
+```
 
 * Services (job queues, cache servers, search engines, etc.)
 
@@ -56,57 +60,57 @@ each endpoint
 the course of development)
 
 * API Endpoints
-#### 			prefix Verb 	URI Pattern													Action
+
 * course_quiz_posts 
-	* GET 		/courses/:course_id/quizzes/:quiz_id/posts(.:format) 		posts#index 
-	* POST 	/courses/:course_id/quizzes/:quiz_id/posts(.:format) 		posts#create
+	* GET 		/courses/:course_id/quizzes/:quiz_id/posts(.:format) 
+	* POST 	/courses/:course_id/quizzes/:quiz_id/posts(.:format)
 		* required: quiz_id, post_id
 		* optional: multiChoice, longForm, picture
 * course_quiz_post 
-	* GET 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#show
-	* PATCH 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#update
-	* PUT 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#update
-	* DELETE 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#destroy
+	* GET 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)
+	* PATCH 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)
+	* PUT 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)
+	* DELETE 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)
 * course_quizzes	
-	*  GET 		/courses/:course_id/quizzes(.:format) 						quizzes#index
-	* POST 	/courses/:course_id/quizzes(.:format) 						quizzes#create
+	*  GET 		/courses/:course_id/quizzes(.:format)
+	* POST 	/courses/:course_id/quizzes(.:format)
 		* required: title, question
 		* optional: N/A
 * course_quiz	
-	* GET 		/courses/:course_id/quizzes/:id(.:format) 					quizzes#show
-	* PATCH 	/courses/:course_id/quizzes/:id(.:format) 					quizzes#update
-	* PUT 		/courses/:course_id/quizzes/:id(.:format) 					quizzes#update
-	* DELETE 	/courses/:course_id/quizzes/:id(.:format) 					quizzes#destroy
-* courses	* GET 		/courses(.:format) 											courses#index
-	* POST 	/courses(.:format) 											courses#create
+	* GET 		/courses/:course_id/quizzes/:id(.:format)
+	* PATCH 	/courses/:course_id/quizzes/:id(.:format)
+	* PUT 		/courses/:course_id/quizzes/:id(.:format)
+	* DELETE 	/courses/:course_id/quizzes/:id(.:format)
+* courses	* GET 		/courses(.:format)
+	* POST 	/courses(.:format)
 		* required: title, description
-		* optional: none
+		* optional: N\A
 * course
-	* GET 		/courses/:id(.:format) 										courses#show
-	* PATCH 	/courses/:id(.:format) 										courses#update
-	* PUT 		/courses/:id(.:format) 										courses#update
-	* DELETE 	/courses/:id(.:format) 										courses#destroy
+	* GET 		/courses/:id(.:format)
+	* PATCH 	/courses/:id(.:format)
+	* PUT 		/courses/:id(.:format)
+	* DELETE 	/courses/:id(.:format)
 * auth_login_user
-	* POST 	/auth/login_user(.:format) 									authentication#authenticate_user	
+	* POST 	/auth/login_user(.:format)
 		* required: quiz_id, post_id
 		* optional: multiChoice, longForm, picture
 * auth_login_student 
-	* POST 	/auth/login_student(.:format) 								authentication#authenticate_student
+	* POST 	/auth/login_student(.:format)
 		* required: quiz_id, post_id
 		* optional: multiChoice, longForm, picture
 * signup_user
-	* POST 	/signup_user(.:format) 										users#create
+	* POST 	/signup_user(.:format)
 		* required: name, email, password, password_confirmation
 		* optional: N/A
 * register_students
-	* POST 	/register_students(.:format) 								register#register
+	* POST 	/register_students(.:format)
 		* required: roster
 			* NOTE: roster is the contents of a csv file uploaded by the professor.
 					We will send the whole plain text as one http request. This
 					may change later, but is the format for now.
 		* optional: title
 * signup_student
-	* POST 	/signup_student(.:format) 									students#create
+	* POST 	/signup_student(.:format)
 		* required: name, sid, email, password, password_confirmation
 		* optional: N/A
 
