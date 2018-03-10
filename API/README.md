@@ -25,11 +25,30 @@ Things you may want to cover:
 
 * Deployment instructions
 
+
+* Notes on Using API
+	* All requests but login and signup require an Authorization header. 
+`GET /courses HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE1MjA3MzQ0Mzl9.35mevCQG59Lz_qsOJmo_dkJHiHr1z35YPtDVzO3Wq8A
+Connection: keep-alive
+Host: localhost:3000
+`
+	* The Authorization token will be returned as a json request on login or signup in this form
+`{
+    "auth_token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE1MjA3MzQ0Mzl9.35mevCQG59Lz_qsOJmo_dkJHiHr1z35YPtDVzO3Wq8A"
+}`
+	* By storing the auth token and using it as a header in each subsequent request, the current session can get or post for the particular user at each endpoint
+	* Get requests require no input parameters, each post request has a list of required parameters provided. (Note: these are subject to change during the course of development)
+
 * API Endpoints
 #### 			prefix Verb 	URI Pattern													Action
 * course_quiz_posts 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts(.:format) 		posts#index 
 	* POST 	/courses/:course_id/quizzes/:quiz_id/posts(.:format) 		posts#create
+		* required: quiz_id, post_id
+		* optional: multiChoice, longForm, picture
 * course_quiz_post 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#show
 	* PATCH 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#update

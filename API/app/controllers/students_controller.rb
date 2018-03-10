@@ -3,7 +3,7 @@ require 'byebug'
 class StudentsController < ApplicationController
 	# POST /signup
 	# return authenticated token upon signup
-	skip_before_action :authorize_request(1), only: :create
+	skip_before_action :authorize_request, only: :create
 
 	def create
 		student = Student.create!(student_params)
