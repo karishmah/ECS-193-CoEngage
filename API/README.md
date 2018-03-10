@@ -67,16 +67,20 @@ the course of development)
 	* PATCH 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#update
 	* PUT 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#update
 	* DELETE 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format) 	posts#destroy
-	* course_quizzes	
+* course_quizzes	
 	*  GET 		/courses/:course_id/quizzes(.:format) 						quizzes#index
 	* POST 	/courses/:course_id/quizzes(.:format) 						quizzes#create
+		* required: title, question
+		* optional: N/A
 * course_quiz	
 	* GET 		/courses/:course_id/quizzes/:id(.:format) 					quizzes#show
 	* PATCH 	/courses/:course_id/quizzes/:id(.:format) 					quizzes#update
 	* PUT 		/courses/:course_id/quizzes/:id(.:format) 					quizzes#update
 	* DELETE 	/courses/:course_id/quizzes/:id(.:format) 					quizzes#destroy
-	* courses	* GET 		/courses(.:format) 											courses#index
+* courses	* GET 		/courses(.:format) 											courses#index
 	* POST 	/courses(.:format) 											courses#create
+		* required: title, description
+		* optional: none
 * course
 	* GET 		/courses/:id(.:format) 										courses#show
 	* PATCH 	/courses/:id(.:format) 										courses#update
@@ -84,12 +88,25 @@ the course of development)
 	* DELETE 	/courses/:id(.:format) 										courses#destroy
 * auth_login_user
 	* POST 	/auth/login_user(.:format) 									authentication#authenticate_user	
+		* required: quiz_id, post_id
+		* optional: multiChoice, longForm, picture
 * auth_login_student 
 	* POST 	/auth/login_student(.:format) 								authentication#authenticate_student
+		* required: quiz_id, post_id
+		* optional: multiChoice, longForm, picture
 * signup_user
 	* POST 	/signup_user(.:format) 										users#create
+		* required: name, email, password, password_confirmation
+		* optional: N/A
 * register_students
 	* POST 	/register_students(.:format) 								register#register
+		* required: roster
+			* NOTE: roster is the contents of a csv file uploaded by the professor.
+					We will send the whole plain text as one http request. This
+					may change later, but is the format for now.
+		* optional: title
 * signup_student
 	* POST 	/signup_student(.:format) 									students#create
+		* required: name, sid, email, password, password_confirmation
+		* optional: N/A
 
