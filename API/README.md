@@ -54,10 +54,10 @@ Host: localhost:3000
 
 	+ By storing the auth token and using it as a header in each subsequent
 	  request, the current session can get or post for the particular user at
-each endpoint
+	  each endpoint
 	+ Get requests require no input parameters, each post request has a list of
 	  required parameters provided. (Note: these are subject to change during
-the course of development)
+	  the course of development)
 
 * API Endpoints
 
