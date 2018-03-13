@@ -92,12 +92,12 @@ Host: localhost:3000
 	* DELETE 	/courses/:id(.:format)
 * auth_login_user
 	* POST 	/auth/login_user(.:format)
-		* required: quiz_id, post_id
-		* optional: multiChoice, longForm, picture
+		* required: email, password
+		* optional: N/A
 * auth_login_student 
 	* POST 	/auth/login_student(.:format)
-		* required: quiz_id, post_id
-		* optional: multiChoice, longForm, picture
+		* required:  email, password
+		* optional:  N/A
 * signup_user
 	* POST 	/signup_user(.:format)
 		* required: name, email, password, password_confirmation
