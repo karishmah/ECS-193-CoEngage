@@ -8,7 +8,7 @@ class AuthorizeApiRequest
 	def call
 		{ user: user}
 		rescue ActiveRecord::RecordNotFound => e
-		{user: student}
+		{ user: student }
 		rescue ActiveRecord::RecordNotFound => e
 				# raise custom error
 			raise(

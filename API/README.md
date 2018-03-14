@@ -64,7 +64,7 @@ Host: localhost:3000
 * course_quiz_posts 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts(.:format) 
 	* POST 	/courses/:course_id/quizzes/:quiz_id/posts(.:format)
-		* required: quiz_id, post_id
+		* required: student_id
 		* optional: multiChoice, longForm, picture
 * course_quiz_post 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)
@@ -81,7 +81,8 @@ Host: localhost:3000
 	* PATCH 	/courses/:course_id/quizzes/:id(.:format)
 	* PUT 		/courses/:course_id/quizzes/:id(.:format)
 	* DELETE 	/courses/:course_id/quizzes/:id(.:format)
-* courses	* GET 		/courses(.:format)
+* courses	
+	* GET 	/courses(.:format)
 	* POST 	/courses(.:format)
 		* required: title, description
 		* optional: N\A

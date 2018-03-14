@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180225015305) do
+ActiveRecord::Schema.define(version: 20180313015305) do
 
   create_table "courses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "title"
@@ -18,6 +18,15 @@ ActiveRecord::Schema.define(version: 20180225015305) do
     t.string "professor"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "memberships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.bigint "course_id"
+    t.bigint "student_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_memberships_on_course_id"
+    t.index ["student_id"], name: "index_memberships_on_student_id"
   end
 
   create_table "posts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -60,6 +69,8 @@ ActiveRecord::Schema.define(version: 20180225015305) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "memberships", "courses"
+  add_foreign_key "memberships", "students"
   add_foreign_key "posts", "quizzes"
   add_foreign_key "posts", "students"
   add_foreign_key "quizzes", "courses"

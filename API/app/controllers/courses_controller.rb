@@ -1,3 +1,5 @@
+require('byebug')
+
 class CoursesController < ApplicationController
 	before_action :set_course, only: [:show, :update, :destroy]
 

@@ -34,7 +34,8 @@ class PostsController < ApplicationController
 	private
 
 	def post_params
-		params.permit(:quiz_id, :student_id, :multiChoice, :longForm, :picture)
+		params.require( :student_id)
+		params.permit( :student_id, :multiChoice, :longForm, :picture)
 	end
 
 	def set_course
