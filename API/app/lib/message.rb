@@ -32,6 +32,10 @@ class Message
 		'Account could not be created'
 	end
 
+	def self.quiz_not_started
+		'Submission failed: Quiz not started'
+	end
+
 	def self.expired_token
 		'Sorry, your token has expired. Please login to continue.'
 	end

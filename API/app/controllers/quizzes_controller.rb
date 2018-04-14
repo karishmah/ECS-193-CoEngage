@@ -16,13 +16,13 @@ class QuizzesController < ApplicationController
 
 	# POST /courses/:course_id/quizzes
 	def create
-		@course.quizzes.create!(quiz_params)#, :started => false)
+		@course.quizzes.create!(quiz_params)
 		json_response(@course, :created)
 	end
 
 	# PUT /courses/:course_id/quizzes/:id
 	def update
-		@quiz.update(quiz_params)#, :started => false)
+		@quiz.update(quiz_params)
 		head :no_content
 	end
 
@@ -32,22 +32,11 @@ class QuizzesController < ApplicationController
 		head :no_content
 	end
 	
-	# PUT /courses/:course_id/quizzes/:id/started/
-#	def start
-#		#set @quiz.started = 1
-#		#set scheduler.in 'timelimit' do
-#		#	@quiz.started = 0
-#	end	
-#
-#	# GET  /courses/:course_id/quizzes/:id/started/
-#	def started
-#		json_response(@quiz.started)
-#	end
 
 	private
 
 	def quiz_params
-		params.permit(:title, :question)
+		params.permit(:title, :question, :started)
 	end
 
 	def set_course

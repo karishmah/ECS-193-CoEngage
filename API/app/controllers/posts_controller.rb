@@ -18,18 +18,21 @@ class PostsController < ApplicationController
 	# POST   /courses/:course_id/quizzes/:quiz_id/posts
 	def create
 		#timer logic here
-		begin
-		@quiz.posts.create!(:student_id => current_user.id,
-							:multiChoice => post_params[:multiChoice],
-							:longForm => post_params[:longForm],
-						    :picture => post_params[:picture],
-						    :answered => post_params[:answered])
-		rescue ActiveRecord::RecordInvalid => e
-			throw e
-
+		if @quiz.started
+			begin
+			post = @quiz.posts.create!(:student_id => current_user.id,
+								:multiChoice => post_params[:multiChoice],
+								:longForm => post_params[:longForm],
+								:picture => post_params[:picture],
+								:answered => post_params[:answered])
+			rescue ActiveRecord::RecordInvalid => e
+				throw e
+			end
+				
+			json_response(post, :created)
+		else
+			json_response(Message.quiz_not_started, 401)
 		end
-			
-		json_response(@quiz, :created)
 	end
 
 	# PUT    /courses/:course_id/quizzes/:quiz_id/posts/:id
