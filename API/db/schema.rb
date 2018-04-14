@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180313015305) do
+ActiveRecord::Schema.define(version: 20180414013733) do
 
   create_table "courses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "title"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20180313015305) do
     t.bigint "student_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "answered"
     t.index ["quiz_id"], name: "index_posts_on_quiz_id"
     t.index ["student_id"], name: "index_posts_on_student_id"
   end

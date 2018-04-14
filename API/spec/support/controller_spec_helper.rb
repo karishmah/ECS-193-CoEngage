@@ -1,4 +1,4 @@
-module UserControllerSpecHelper
+module ControllerSpecHelper
 	# generate tokens from user id
 	def token_generator(user_id)
 		JsonWebToken.encode(user_id: user_id)

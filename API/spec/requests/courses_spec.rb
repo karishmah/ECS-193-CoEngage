@@ -5,7 +5,7 @@ RSpec.describe 'Courses API', type: :request do
 		#initialize test data 
 		let!(:courses) { create_list(:course, 10, professor: user.id) }
 		let(:course_id) { courses.first.id }
-		let(:headers) { valid_headers }
+		let(:headers) { valid_user_headers }
 
 
 		# Test suite for GET /courses

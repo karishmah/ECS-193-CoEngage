@@ -1,8 +1,8 @@
 FactoryBot.define do
 	factory :student do
 		name { Faker::Name.name }
-		email 'foo@bar.com'
+		email { Faker::Internet.unique.email }
 		password 'foobar'
-		sid 999999999
+		sid { Faker::Number.number(9) }
 	end
 end

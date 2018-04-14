@@ -1,3 +1,5 @@
+require('byebug')
+
 class QuizzesController < ApplicationController
 	before_action :set_course
 	before_action :set_course_quiz, only: [:show, :update, :destroy]
@@ -14,13 +16,13 @@ class QuizzesController < ApplicationController
 
 	# POST /courses/:course_id/quizzes
 	def create
-		@course.quizzes.create!(quiz_params)
+		@course.quizzes.create!(quiz_params)#, :started => false)
 		json_response(@course, :created)
 	end
 
 	# PUT /courses/:course_id/quizzes/:id
 	def update
-		@quiz.update(quiz_params)
+		@quiz.update(quiz_params)#, :started => false)
 		head :no_content
 	end
 
@@ -29,6 +31,18 @@ class QuizzesController < ApplicationController
 		@quiz.destroy
 		head :no_content
 	end
+	
+	# PUT /courses/:course_id/quizzes/:id/started/
+#	def start
+#		#set @quiz.started = 1
+#		#set scheduler.in 'timelimit' do
+#		#	@quiz.started = 0
+#	end	
+#
+#	# GET  /courses/:course_id/quizzes/:id/started/
+#	def started
+#		json_response(@quiz.started)
+#	end
 
 	private
 

@@ -1,3 +1,4 @@
+require('byebug')
 class PostsController < ApplicationController
 	before_action :set_course
 	before_action :set_course_quiz
@@ -13,9 +14,21 @@ class PostsController < ApplicationController
 		json_response(@post)
 	end
 
+	#update to rewrite post from same user
 	# POST   /courses/:course_id/quizzes/:quiz_id/posts
 	def create
-		@quiz.posts.create!(post_params)
+		#timer logic here
+		begin
+		@quiz.posts.create!(:student_id => current_user.id,
+							:multiChoice => post_params[:multiChoice],
+							:longForm => post_params[:longForm],
+						    :picture => post_params[:picture],
+						    :answered => post_params[:answered])
+		rescue ActiveRecord::RecordInvalid => e
+			throw e
+
+		end
+			
 		json_response(@quiz, :created)
 	end
 
@@ -34,8 +47,7 @@ class PostsController < ApplicationController
 	private
 
 	def post_params
-		params.require( :student_id)
-		params.permit( :student_id, :multiChoice, :longForm, :picture)
+		params.permit(:answered, :multiChoice, :longForm, :picture)
 	end
 
 	def set_course

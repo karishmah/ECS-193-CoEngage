@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 		post 'auth/login_user', to: 'authentication#authenticate_user'
 		post 'auth/login_student', to: 'authentication#authenticate_student'
 		post 'signup_user', to: 'users#create'
-		post 'register_students', to: 'register#register'
+		post 'register_students', to: 'register#register_all'
+		post 'register_student', to: 'register#register'
 		post 'signup_student', to: 'students#create'
 end

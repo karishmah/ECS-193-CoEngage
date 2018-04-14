@@ -6,12 +6,12 @@ RSpec.describe 'Posts API' do
 	let!(:course) { create(:course, professor: user.id) }
 	let!(:quiz) { create(:quiz, course_id: course.id) }
 	let(:student) { create(:student) }
-	let!(:posts) { create_list(:post, 20, quiz_id: quiz.id, student_id: student.id) }
+	let!(:posts) { create_list(:post, 20, quiz_id: quiz.id, student_id: student.id, answered: true) }
 	let(:student_id) { student.id }
 	let(:course_id) { course.id }
 	let(:quiz_id) { quiz.id }
 	let(:id) { posts.first.id }
-	let(:headers) { valid_headers }
+	let(:headers) { valid_student_headers }
 
 
 	# Test suite for GET /courses/:course_id/quizzes/:quiz_id/posts
@@ -67,35 +67,9 @@ RSpec.describe 'Posts API' do
 			end
 		end
 	end
-
-	# Test suite for POST /courses/:course_id/quizzes/:quiz_id/posts
-	describe 'POST /courses/:course_id/quizzes/:quiz_id/posts' do
-		let(:valid_attributes) { { multiChoice: 'A', longForm: 'This is an answer to a question...', student_id: student_id, quiz_id: quiz_id }.to_json }
-
-		context 'when request attributes are valid' do
-			before { post "/courses/#{course_id}/quizzes/#{quiz_id}/posts", params: valid_attributes, headers: headers }
-
-			it 'returns status code 201' do
-				expect(response).to have_http_status(201)
-			end
-		end
-
-		context 'when an invalid request' do
-			before { post "/courses/#{course_id}/quizzes/#{quiz_id}/posts", params: {}, headers: headers }
-
-			it 'returns status code 422' do
-				expect(response).to have_http_status(422)
-			end
-
-#			it 'returns a failure message' do
-#				expect(response.body).to match(/Validation failed: Question can't be blank, Title can't be blank/)
-#			end
-		end
-	end
-
 	# Test suite for PUT /courses/:course_id/quizzes/:quiz_id/posts/:id
 	describe 'PUT /courses/:course_id/quizzes/:quiz_id/posts/:id' do
-		let(:valid_attributes) { { multiChoice: 'B', longForm: 'This is a better answer to a question...' }.to_json }
+		let(:valid_attributes) { { answered: true, multiChoice: 'B', longForm: 'This is a better answer to a question...' }.to_json }
 
 		before do
 			put "/courses/#{course_id}/quizzes/#{quiz_id}/posts/#{id}", params: valid_attributes, headers: headers 

@@ -19,8 +19,7 @@ class StudentsController < ApplicationController
 			:name,
 			:sid,
 			:email,
-			:password,
-			:password_confirmation
+			:password
 		)
 	end
 end

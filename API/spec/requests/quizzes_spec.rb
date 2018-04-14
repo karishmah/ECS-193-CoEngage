@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'byebug'
 
 RSpec.describe 'Quizs API' do
 	# Initialize the test data
@@ -7,7 +8,7 @@ RSpec.describe 'Quizs API' do
 	let!(:quizzes) { create_list(:quiz, 20, course_id: course.id) }
 	let(:course_id) { course.id }
 	let(:id) { quizzes.first.id }
-	let(:headers) { valid_headers }
+	let(:headers) { valid_user_headers }
 
 	# Test suite for GET /courses/:course_id/quizzes
 	describe 'GET /courses/:course_id/quizzes' do
