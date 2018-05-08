@@ -9,6 +9,10 @@ require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
 require "action_cable/engine"
+
+require "json"
+require "aws-sdk-s3"
+require "byebug"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
@@ -20,18 +24,10 @@ module Testing
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
-#	config.action_mailer.delivery_method = :smtp
-#	config.action_mailer.perform_deliveries = true
-#	config.action_mailer.smtp_settings = {
-#		address:              'CoEngage.online',
-#		port:                 25,
-#		domain:               'ucdavis.edu',
-#		user_name:            'devon',
-#		password:             'DfghJ!@#',
-#		authentication:       'plain',
-#		enable_starttls_auto: true  
-#	}
-#	ActionMailer::Base.default_content_type = "text/html"
+
+	
+		
+	
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

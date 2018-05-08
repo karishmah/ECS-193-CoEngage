@@ -5,11 +5,13 @@ RSpec.describe 'Posts API' do
 	let(:user) { create(:user) }
 	let!(:course) { create(:course, professor: user.id) }
 	let!(:quiz) { create(:quiz, course_id: course.id) }
+	let!(:quiz2) { create(:quiz, course_id: course.id) }
 	let(:student) { create(:student) }
 	let!(:posts) { create_list(:post, 20, quiz_id: quiz.id, student_id: student.id, answered: true) }
 	let(:student_id) { student.id }
 	let(:course_id) { course.id }
 	let(:quiz_id) { quiz.id }
+	let(:quiz2_id) { quiz2.id }
 	let(:id) { posts.first.id }
 	let(:headers) { valid_student_headers }
 
@@ -54,11 +56,18 @@ RSpec.describe 'Posts API' do
 				expect(json['id']).to eq(id)
 			end
 		end
+	end
+
+
+	# Test suite for GET /courses/:course_id/quizzes/:id/posts/:id
+	describe 'GET /courses/:course_id/quizzes/:quiz_id/posts/:id' do
+		before { get "/courses/#{course_id}/quizzes/#{quiz2_id}/posts/#{id}", params: {}, headers: headers }
 
 		context 'when course quiz_post does not exist' do
 			let(:id) { 0 }
 
 			it 'returns status code 404' do
+				expect(response.body).to match(/Couldn't find Post/)
 				expect(response).to have_http_status(404)
 			end
 
