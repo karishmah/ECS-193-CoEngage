@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+    
+    <title>CoEngage</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet"  type="text/css" href="193.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucinda Grande">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <body>
+        
+        
+        <div class="sidenav" style="display:none;" id="sidebar">
+            <center><img src="/Users/akanksha/Downloads/193/logo_transparent_background.png" style="width:220px; height=275px;"></center>
+            &nbsp;&nbsp;<br><br>
+            <a href="#" id="navitem" onclick="mainLoadPage();">Courses</a>
+            <div class="logoutButton" id="logout">
+                <button type="logButton" class="btn btn-default btn-sm" style="margin-left:50px; background-color: #5DBCD2; border-color: #5DBCD2; margin-bottom: 5px; height:50px; font-size: 18px; color:#ABE9FE;">
+                    <span class="glyphicon glyphicon-log-out"></span> Log Out
+                </button>
+            </div>
+        </div>
+
+        
+        
+        <div class="pages" id="login">
+            <div class="loginCSS">
+                <center><img src="/Users/akanksha/Downloads/193/logo_transparent_background.png" style="width:220px; height=275px;"></center><br><br>
+            </div>
+                <hr class="w3-round" style="width:1000%; margin-left: 0; background-color: #5DBCD2; border: 10px solid #5DBCD2;">
+                <div class="loginCSS2">
+                    <br><br>
+                    Username: <input type="text" id="username">
+                    <br>
+                    Password:  <input type="password" id="password">
+                    <br><br>
+                    <button class="submitButton" onclick="mainPageRedirect();" style="width:100px;">Submit</button>
+                </div>
+        </div>
+
+        
+        
+        <div class="pages" id="main" onload="mainLoad();" style="display:none";>
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Courses</h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <button id="addCourseButton" class="navButton" onclick="addCourseLoad();">Add a new course</button>
+            <div class="flexContainer">
+                <button class="optionButtons" onclick="coursePage('ECS193B');";>ECS193B</button>
+                <button class="optionButtons" onclick="coursePage('ECS162');">ECS162</button>
+                <button class="optionButtons" onclick="coursePage('ECS188');">ECS188</button>
+                <button class="optionButtons" onclick="coursePage('COM53B');">COM53B</button>
+            </div>
+        </div>
+
+        
+        
+        <div class="pages" id="addCourse" style="display:none;">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Add a new Course</h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+            <div class="formType">
+                Title
+                <br>
+                <input type="text" style="width:900px;" id="courseTitle">
+                <br><br>
+                CRN
+                <br>
+                <input type="text" style="width:900px;" id="CRN">
+                <br><br>
+                Add class roster
+                <input type="file" style="font-size:75%;" id="courseRoster">
+                <br>
+                <button class="submitButton" onclick="addCourseRedirect();">Submit</button>
+            </div>
+        </div>
+
+        
+        
+        <div class="pages" id="courseMainPage" style="display:none;">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="coursePageTitle"></h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <div class="flexContainer">
+                <button class="optionButtons" onclick="courseStudents();">Students</button>
+                <button class="optionButtons" onclick="courseTests();">Tests</button>
+            </div>
+        </div>
+
+        
+        
+        <div class="pages" id="students" style="display:none;" onload="courseStudents();">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Students</h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+            <button id="addStudentButton" class="navButton" onclick="addStudentLoad();">Add a new student</button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <table class="roster">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Student ID</th>
+                    <th>Email</th>
+                    <th>Quiz Grade</th>
+                </tr>
+                <tr>
+                    <td>A</td>
+                    <td>A</td>
+                    <td>1</td>
+                    <td>a@ucdavis.edu</td>
+                    <td>90%</td>
+                </tr>
+                <tr>
+                    <td>B</td>
+                    <td>B</td>
+                    <td>2</td>
+                    <td>b@ucdavis.edu</td>
+                    <td>91%</td>
+                </tr>
+            </table>
+        </div>
+        
+        
+
+        <div class="pages" id="addStudent" style="display:none;">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Add a new student</h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+            <div class="formType">
+                First Name
+                <br>
+                <input type="text" style="width:900px;" id="firstName">
+                <br><br>
+                Last Name
+                <br>
+                <input type="text" style="width:900px;" id="lastName">
+                <br><br>
+                Student ID
+                <br>
+                <input type="text" style="width:900px;" id="studentID">
+                <br><br>
+                Email
+                <br>
+                <input type="text" style="width:900px;" id="email">
+                <br><br>
+                <button class="submitButton" onclick="addStudentRedirect(); courseStudents();">Submit</button>
+            </div>
+        </div>
+
+        
+        
+        <div class="pages" id="tests" style="display:none;">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Tests</h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <div class="flexContainer">
+                <button class="optionButtons" onclick="testBankLoad();">Test Bank</button>
+                <button class="optionButtons" onclick="answeredLoad();">Student Work</button>
+            </div>
+        </div>
+
+        
+        
+        <div class="pages" id="testBank" style="display:none;" onload="getAllQuestion();">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Test Bank</h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+            <button id="addQuestionButton" class="navButton" onclick="addQuestionLoad();">Add a new question</button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <table class="questionBank">
+                <tr><td><p onclick="displayQuestionLoad('Question A');">Question A</p></td></tr>
+                <tr><td><p onclick="displayQuestionLoad('Question B');">Question B</p></td></tr>
+                <tr><td><p onclick="displayQuestionLoad('Question C');">Question C</p></td></tr>
+            </table>
+        </div>
+
+        
+        
+        <div class="pages" id="addQuestion" style="display:none;">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Add a new question</h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+            <div class="formType" style="font-size:20px;">
+                <p style="font-size:25px;">Select the question type</p>
+                <br>
+                <input type="radio" class="radioButton" onclick="textLoad();" value="text" id="textSel">Text
+                <br>
+                <input type="radio" class="radioButton" onclick="imageLoad();" value="image" id="imgSel">Image
+                <br>
+                <input type="radio" class="radioButton" onclick="mcqLoad();" value="mcq" id="mcqSel">Multiple-Choice
+                <br>
+            </div>
+            <div class="formType" id="textType" style="display:none; font-size: 20px;">
+                <br>
+                Question
+                <br>
+                <input type="text" id="textQuestion" style="width:900px;">
+                <br><br>
+                <button class="submitButton" onclick="addQuestionRedirect('text'); getAllQuestion();">Submit</button>
+            </div>
+            <div class="formType" id="imageType" style="display:none; font-size:20px;">
+                <br>
+                Question
+                <br>
+                <input type="text" id="imageQuestion" style="width:900px;">
+                <br><br>
+                <button class="submitButton" onclick="addQuestionRedirect('image'); getAllQuestion();">Submit</button>
+            </div>
+            <div class="formType" id="mcqNumberType" style="display:none; font-size:20px;">
+                <br>
+                Question
+                <br>
+                <input type="text" id="mcqQuestion" style="width:900px;">
+                <br>
+                Number of answer options
+                <br>
+                <input type="number" id="numMcqOpt" min=2 max=10 style="width:900px;">
+                <br><br>
+                <button class="submitButton" onclick="addfields();">Submit</button>
+            </div>
+            <div class="formType" id="mcqType" style="display:none; font-size:20px;">
+                <div id="mcqOptsType" style="display:none; font-size:20px;"></div>
+                <br>
+                <button class="submitButton" onclick="addQuestionRedirect('mcq'); getAllQuestion();">Submit</button>
+            </div>
+        </div>
+
+        
+        
+        <div class="pages" id="displayQuestion" style="display:none;">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="questionTitle"></h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+            <button id="askQuestionButton" class="navButton" onclick="askQuestion();">Ask this question</button>
+            <div id="popup">
+                <div id="popupText">
+                    <button id="startQuestion" class="popupButton" style="margin-left: 550px; margin-top: 375px;" onclick="startQ();">Start</button>
+                    <button id="stopQuestion" class="popupButton" style="margin-left: 750px; margin-top: 375px;"  onclick="stopQ();">Stop</button>
+                    <button id="cancelQuestion" class="popupButton" style="margin-left: 950px; margin-top: 375px;"  onclick="cancel();">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        
+
+        <div class="pages" id="studentAnswers" style="display:none;" onload="getAllAnsweredQuestions();">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Student Answers</h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+            <br>
+            <br>
+            <table class="questionBank">
+                <tr><td><p onclick="displayAnsQuestionLoad('Question A');">Question A</p></td></tr>
+                <tr><td><p onclick="displayAnsQuestionLoad('Question B');">Question B</p></td></tr>
+                <tr><td><p onclick="displayAnsQuestionLoad('Question C');">Question C</p></td></tr>
+            </table>
+        </div>
+
+        
+        
+        <div class="pages" id="displayAnsweredQuestion" style="display:none;">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="AnsweredTitle"></h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+            <table class="roster" id="answeredRoster">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Student ID</th>
+                    <th>Answer</th>
+                </tr>
+                <tr>
+                    <td>A</td>
+                    <td>A</td>
+                    <td>1</td>
+                    <td>AA</td>
+                </tr>
+                <tr>
+                    <td>B</td>
+                    <td>B</td>
+                    <td>2</td>
+                    <td>BB</td>
+                </tr>
+            </table>
+        </div>
+        
+
+        
+        <div class="pages" id="displayImageAnsweredQuestion" style="display:none;">
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="AnsweredTitle"></h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+        get all urls and student names and ID's, fill in as images
+        </div>
+
+
+        <script src="193.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+    </body>
+</html>
