@@ -19,8 +19,6 @@ class RegisterController < ApplicationController
 				student = Student.create!({name: row[0], sid: row[1], email: row[2], :password => pass})
 				system("$PWD/email_student   '#{course.title}' '#{current_user.name}' '#{pass}' '#{student.email}' 2>&1 OUTPUT_EMAIL")
 			else
-				#byebug
-				#student.memberships << Membership.create(student_id: @student.id, course_id: @course.id)
 				student.courses << course
 			end
 		end

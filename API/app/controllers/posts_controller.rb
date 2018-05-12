@@ -62,7 +62,12 @@ class PostsController < ApplicationController
 
 	# PUT    /courses/:course_id/quizzes/:quiz_id/posts/:id
 	def update
-		@post.update(post_params)
+		@post.update({
+			:answered => params[:answered],
+			:multiChoice => params[:multiChoice],
+			:longForm => params[:longForm],
+			:picture => params[:picture],
+	   	})
 		head :no_content
 	end
 
@@ -75,7 +80,7 @@ class PostsController < ApplicationController
 	private
 
 	def post_params
-		params.permit(:answered, :multiChoice, :longForm, :picture)
+		params.permit(:answered, :multiChoice, :longForm, :picture, :course_id, :quiz_id)
 	end
 
 	def set_course
