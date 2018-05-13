@@ -67,7 +67,7 @@ Host: localhost:3000
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts(.:format) 
 	* POST 	/courses/:course_id/quizzes/:quiz_id/posts(.:format)
 		* required: 
-		* optional: multiChoice, longForm, picture
+		* optional: multiChoice, longForm, picture (will only accept one of the three)
 * course_quiz_post 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)
 	* PATCH 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)
@@ -76,7 +76,7 @@ Host: localhost:3000
 * course_quizzes	
 	*  GET 		/courses/:course_id/quizzes(.:format)
 	* POST 	/courses/:course_id/quizzes(.:format)
-		* required: title, question
+		* required: title, question, question_type
 		* optional: N/A
 * course_quiz	
 	* GET 		/courses/:course_id/quizzes/:id(.:format)
@@ -103,7 +103,7 @@ Host: localhost:3000
 		* optional:  N/A
 * signup_user
 	* POST 	/signup_user(.:format)
-		* required: name, email, password, password_confirmation
+		* required: name, email, password
 		* optional: N/A
 * register_students
 	* POST 	/register_students(.:format)
@@ -111,9 +111,19 @@ Host: localhost:3000
 			* NOTE: roster is the contents of a csv file uploaded by the professor.
 					We will send the whole plain text as one http request. This
 					may change later, but is the format for now.
-		* optional: title
+			* NOTE2: Likely to change once canvas integration is complete
+		* optional: N/A
 * signup_student
 	* POST 	/signup_student(.:format)
-		* required: name, sid, email, password, password_confirmation
+		* required: name, sid, email, password
 		* optional: N/A
+* change_student_password 
+	*PUT    /change_student_password(.:format)
+		* required: password
+		* optional: N/A
+* change_user_password 
+	*PUT    /change_user_password(.:format)
+		* required: password
+		* optional: N/A
+
 
