@@ -78,7 +78,7 @@ RSpec.describe 'Posts API' do
 	end
 	# Test suite for PUT /courses/:course_id/quizzes/:quiz_id/posts/:id
 	describe 'PUT /courses/:course_id/quizzes/:quiz_id/posts/:id' do
-		let(:valid_attributes) { { answered: true, multiChoice: 'B', longForm: 'This is a better answer to a question...' }.to_json }
+		let(:valid_attributes) { { longForm: 'This is a better answer to a question...' }.to_json }
 
 		before do
 			put "/courses/#{course_id}/quizzes/#{quiz_id}/posts/#{id}", params: valid_attributes, headers: headers 
@@ -91,7 +91,6 @@ RSpec.describe 'Posts API' do
 
 			it 'updates the post' do
 				updated_post = Post.find(id)
-				expect(updated_post.multiChoice).to match(/B/)
 				expect(updated_post.longForm).to match(/This is a better answer to a question./)
 			end
 		end

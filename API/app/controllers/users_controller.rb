@@ -11,6 +11,14 @@ class UsersController < ApplicationController
 		json_response(response, :created)
 	end
 
+	# PUT /update_student_password
+	def update
+		current_user.update!({ :password => user_params[:password]})
+		auth_token = AuthenticateStudent.new(current_user.email, current_user.password).call
+		response = { message: Message.password_changed, auth_token: auth_token}
+		json_response(response, :created)
+	end
+
 	private
 
 	def user_params

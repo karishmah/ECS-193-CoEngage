@@ -16,8 +16,8 @@ class QuizzesController < ApplicationController
 
 	# POST /courses/:course_id/quizzes
 	def create
-		@course.quizzes.create!(quiz_params)
-		json_response(@course, :created)
+		quiz = @course.quizzes.create!(quiz_params)
+		json_response(quiz, :created)
 	end
 
 	# PUT /courses/:course_id/quizzes/:id

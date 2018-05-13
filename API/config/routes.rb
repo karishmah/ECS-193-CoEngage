@@ -12,4 +12,6 @@ Rails.application.routes.draw do
 		post 'register_students', to: 'register#register_all'
 		post 'register_student', to: 'register#register'
 		post 'signup_student', to: 'students#create'
+		put 'change_student_password', to: 'students#update'
+		put 'change_user_password', to: 'users#update'
 end

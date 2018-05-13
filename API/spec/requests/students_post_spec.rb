@@ -18,7 +18,7 @@ RSpec.describe 'Posts Students API' do
 	#TODO: Failing because student is not added to course!
 	# Test suite for POST /courses/:course_id/quizzes/:quiz_id/posts
 	describe 'POST /courses/:course_id/quizzes/:quiz_id/posts' do
-		let(:valid_attributes) { { answered: true,multiChoice: 'A', longForm: 'This is an answer to a question...'}.to_json }
+		let(:valid_attributes) { {multiChoice: 'A'}.to_json }
 
 		context 'when request attributes are valid' do
 			before { 
@@ -50,7 +50,7 @@ RSpec.describe 'Posts Students API' do
 			end
 
 			it 'returns a failure message' do
-				expect(response.body).to match(/Validation failed: Answered can't be blank/)
+				expect(response.body).to match(/Validation failed: Only submit one answer type/)
 			end
 		end
 

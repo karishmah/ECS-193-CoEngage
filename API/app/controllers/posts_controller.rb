@@ -8,13 +8,31 @@ class PostsController < ApplicationController
 	# GET    /courses/:course_id/quizzes/:quiz_id/posts
 	def index
 		#TODO Test for picture or other form of answer
-		json_response(@quiz.posts)
+		if @quiz.question_type = "picture"
+			urls = []
+			for post in @quiz.posts do
+				post_path = "Photos/#{request.fullpath[ 1 .. request.fullpath.length - 1]}/#{post.id}"
+				obj = @static_storage_bucket.object(post_path)
+				url = URI.parse(obj.presigned_url(:get))
+				urls << url
+			end
+			json_response(urls)
+		else
+			json_response(@quiz.posts)
+		end
 	end
 
 	# GET    /courses/:course_id/quizzes/:quiz_id/posts/:id 
 	def show
 		#TODO Test for picture or other form of answer
-		json_response(@post)
+		if @quiz.question_type == "picture"
+				post_path = "Photos/#{request.fullpath[ 1 .. request.fullpath.length - 1]}/#{post.id}"
+				obj = @static_storage_bucket.object(post_path)
+				url = URI.parse(obj.presigned_url(:get))
+				json_response(url)
+		else
+			json_response(@post)
+		end
 	end
 
 	# POST   /courses/:course_id/quizzes/:quiz_id/posts
@@ -30,14 +48,12 @@ class PostsController < ApplicationController
 					post.update(:student_id => current_user.id,
 									:multiChoice => post_params[:multiChoice],
 									:longForm => post_params[:longForm],
-									:picture => post_params[:picture],
-									:answered => post_params[:answered])
+									:picture => post_params[:picture])
 				else
 					post = @quiz.posts.create!(:student_id => current_user.id,
 									:multiChoice => post_params[:multiChoice],
 									:longForm => post_params[:longForm],
-									:picture => post_params[:picture],
-									:answered => post_params[:answered])
+									:picture => post_params[:picture])
 				end
 			rescue ActiveRecord::RecordInvalid => e
 				throw e
@@ -63,7 +79,6 @@ class PostsController < ApplicationController
 	# PUT    /courses/:course_id/quizzes/:quiz_id/posts/:id
 	def update
 		@post.update({
-			:answered => params[:answered],
 			:multiChoice => params[:multiChoice],
 			:longForm => params[:longForm],
 			:picture => params[:picture],
@@ -80,7 +95,7 @@ class PostsController < ApplicationController
 	private
 
 	def post_params
-		params.permit(:answered, :multiChoice, :longForm, :picture, :course_id, :quiz_id)
+		params.permit( :multiChoice, :longForm, :picture, :course_id, :quiz_id)
 	end
 
 	def set_course

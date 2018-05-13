@@ -25,10 +25,22 @@
 $ http --print HBhb POST localhost:3000/signup_user  name="Lilliana Graham" email="foo@bar.com" password="foobar" password_confirmation="foobar"
 ```
 
-* Services (job queues, cache servers, search engines, etc.)
+	+ The Authorization token will be returned as a json request on login or
+	  signup in this form
+
+```
+{
+    "auth_token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE1MjA3MzQ0Mzl9.35mevCQG59Lz_qsOJmo_dkJHiHr1z35YPtDVzO3Wq8A"
+}
+```
+	+ To use the authorization header using the httpie CLI, you can use
+
+```
+$ http --print HBhb GET localhost:3000/courses Authorization:"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE1MjA3MzQ0Mzl9.35mevCQG59Lz_qsOJmo_dkJHiHr1z35YPtDVzO3Wq8A"
+```
 
 * Deployment instructions
-
+	+ TODO
 
 * Notes on Using API
 
@@ -42,16 +54,6 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE1MjA3MzQ0Mzl9.35m
 Connection: keep-alive
 Host: localhost:3000
 ```
-
-	+ The Authorization token will be returned as a json request on login or
-	  signup in this form
-
-```
-{
-    "auth_token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE1MjA3MzQ0Mzl9.35mevCQG59Lz_qsOJmo_dkJHiHr1z35YPtDVzO3Wq8A"
-}
-```
-
 	+ By storing the auth token and using it as a header in each subsequent
 	  request, the current session can get or post for the particular user at
 	  each endpoint
@@ -64,7 +66,7 @@ Host: localhost:3000
 * course_quiz_posts 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts(.:format) 
 	* POST 	/courses/:course_id/quizzes/:quiz_id/posts(.:format)
-		* required: student_id
+		* required: 
 		* optional: multiChoice, longForm, picture
 * course_quiz_post 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)

@@ -27,9 +27,12 @@ class Message
 		'Accounts registered successfully'
 	end
 
-
 	def self.account_not_created
 		'Account could not be created'
+	end
+
+	def self.password_changed
+		'Account password changed successfully'
 	end
 
 	def self.quiz_not_started
