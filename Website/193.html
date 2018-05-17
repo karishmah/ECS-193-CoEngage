@@ -15,7 +15,7 @@
         <div class="sidenav" style="display:none;" id="sidebar">
             <center><img src="/Users/akanksha/Downloads/193/logo_transparent_background.png" style="width:220px; height=275px;"></center>
             &nbsp;&nbsp;<br><br>
-            <a href="#" id="navitem" onclick="mainLoadPage();">Courses</a>
+            <a href="#" id="navitem" onclick="courseNavLoad();">Courses</a>
             <div class="logoutButton" id="logout">
                 <button type="logButton" class="btn btn-default btn-sm" style="margin-left:50px; background-color: #5DBCD2; border-color: #5DBCD2; margin-bottom: 5px; height:50px; font-size: 18px; color:#ABE9FE;">
                     <span class="glyphicon glyphicon-log-out"></span> Log Out
@@ -24,22 +24,50 @@
         </div>
 
         
+        <div class="sidenav2" style="display:none;" id="courseSidebar">
+            <br>
+            <button onclick="closeSidenav();" style=" position:absolute; top:0; right:0;" class="closebtn">&times;</button>
+            <a href="#" id="courseNav" onclick="coursePage('ECS193B'); closeSidenav();">ECS193B</a>
+            <a href="#" id="courseNav" onclick="coursePage('ECS162'); closeSidenav();">ECS162</a>
+            <a href="#" id="courseNav" onclick="addCourseLoad(); closeSidenav();">Add a new course</a>
+        </div>
+        
         
         <div class="pages" id="login">
             <div class="loginCSS">
-                <center><img src="/Users/akanksha/Downloads/193/logo_transparent_background.png" style="width:220px; height=275px;"></center><br><br>
+                <center><img src="/Users/akanksha/Downloads/193/logo_transparent_background.png" style="width:230px; height=275px;"></center><br><br>
             </div>
                 <hr class="w3-round" style="width:1000%; margin-left: 0; background-color: #5DBCD2; border: 10px solid #5DBCD2;">
                 <div class="loginCSS2">
                     <br><br>
-                    Username: <input type="text" id="username">
+                    Email: &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <input type="text" id="username">
                     <br>
                     Password:  <input type="password" id="password">
-                    <br><br>
-                    <button class="submitButton" onclick="mainPageRedirect();" style="width:100px;">Submit</button>
+                    <br><br> 
+                    <button id="signup" class="submitButton" onclick="signupLoad();"  style="width:100px;">Sign Up</button>
+                    <button id="submitLogin" class="submitButton" onclick="mainPageRedirect(); loginAuth();" style="width:100px;">Submit</button>
                 </div>
         </div>
-
+        
+        
+        <div class="pages" id="signupPage"  onload="signupLoad();" style="display:none;">
+            <div class="loginCSS">
+                <center><img src="/Users/akanksha/Downloads/193/logo_transparent_background.png" style="width:230px; height=275px;"></center><br><br>
+            </div>
+                <hr class="w3-round" style="width:1000%; margin-left: 0; background-color: #5DBCD2; border: 10px solid #5DBCD2;">
+                <div class="loginCSS2">
+                    <br>
+                    Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="newUser">
+                    <br>
+                    Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" id="newEmail">
+                    <br>
+                    Password: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<input type="password" id="newPassword">
+                    <br>
+                    Confirm Password:  <input type="password" id="newPassword2">
+                    <br><br>
+                    <button id="submitsignup" class="submitButton" onclick="signupRedirect();" style="width:100px;">Submit</button>
+                </div>
+        </div>
         
         
         <div class="pages" id="main" onload="mainLoad();" style="display:none";>
@@ -55,8 +83,7 @@
         </div>
 
         
-        
-        <div class="pages" id="addCourse" style="display:none;">
+        <div class="pages" id="addCourse" onload="addCourseLoad();" style="display:none;">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Add a new Course</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <br>
@@ -77,7 +104,6 @@
         </div>
 
         
-        
         <div class="pages" id="courseMainPage" style="display:none;">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="coursePageTitle"></h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
@@ -86,47 +112,62 @@
                 <button class="optionButtons" onclick="courseTests();">Tests</button>
             </div>
         </div>
-
         
         
         <div class="pages" id="students" style="display:none;" onload="courseStudents();">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Students</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <br>
-            <button id="addStudentButton" class="navButton" onclick="addStudentLoad();">Add a new student</button>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <table class="roster">
+            <input type="text" class="searchBar" style="margin-left:420px" id="studentSearch" onkeyup="searchStudents();" placeholder="Search...">
+            <button id="addStudentButton" class="navButton" style="margin-top:18px;" onclick="addStudentLoad();">Add a new student</button><br><br><br><br><br>
+            <table class="roster" id="studentRosterTable">
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Student ID</th>
-                    <th>Email</th>
-                    <th>Quiz Grade</th>
+                    <th onclick="sortStudentsAlpha(0);">First Name</th>
+                    <th onclick="sortStudentsAlpha(1);">Last Name</th>
+                    <th onclick="sortStudentsNum(2);">Student ID</th>
+                    <th onclick="sortStudentsAlpha(3);">Email</th>
+                    <th onclick="sortStudentsNum(4);">Quiz Grade</th>
                 </tr>
                 <tr>
                     <td>A</td>
                     <td>A</td>
                     <td>1</td>
                     <td>a@ucdavis.edu</td>
-                    <td>90%</td>
+                    <td>90</td>
                 </tr>
                 <tr>
                     <td>B</td>
                     <td>B</td>
                     <td>2</td>
                     <td>b@ucdavis.edu</td>
-                    <td>91%</td>
+                    <td>91</td>
+                </tr>
+                 <tr>
+                    <td>A</td>
+                    <td>B</td>
+                    <td>3</td>
+                    <td>ab@ucdavis.edu</td>
+                    <td>87</td>
+                </tr>
+                <tr>
+                    <td>AA</td>
+                    <td>B</td>
+                    <td>4</td>
+                    <td>aab@ucdavis.edu</td>
+                    <td>99</td>
+                </tr>
+                <tr>
+                    <td>X</td>
+                    <td>Z</td>
+                    <td>5</td>
+                    <td>xz@ucdavis.edu</td>
+                    <td>34</td>
                 </tr>
             </table>
         </div>
         
         
-
-        <div class="pages" id="addStudent" style="display:none;">
+        <div class="pages" id="addStudent" style="display:none;" onload="addStudentLoad();">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Add a new student</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <br>
@@ -152,8 +193,7 @@
         </div>
 
         
-        
-        <div class="pages" id="tests" style="display:none;">
+        <div class="pages" id="tests" style="display:none;" onload="courseTests();">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Tests</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <div class="flexContainer">
@@ -161,7 +201,6 @@
                 <button class="optionButtons" onclick="answeredLoad();">Student Work</button>
             </div>
         </div>
-
         
         
         <div class="pages" id="testBank" style="display:none;" onload="getAllQuestion();">
@@ -181,8 +220,7 @@
             </table>
         </div>
 
-        
-        
+          
         <div class="pages" id="addQuestion" style="display:none;">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Add a new question</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
@@ -233,7 +271,6 @@
         </div>
 
         
-        
         <div class="pages" id="displayQuestion" style="display:none;">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="questionTitle"></h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
@@ -248,8 +285,7 @@
             </div>
         </div>
         
-        
-
+    
         <div class="pages" id="studentAnswers" style="display:none;" onload="getAllAnsweredQuestions();">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Student Answers</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
@@ -262,7 +298,6 @@
                 <tr><td><p onclick="displayAnsQuestionLoad('Question C');">Question C</p></td></tr>
             </table>
         </div>
-
         
         
         <div class="pages" id="displayAnsweredQuestion" style="display:none;">
@@ -292,7 +327,6 @@
         </div>
         
 
-        
         <div class="pages" id="displayImageAnsweredQuestion" style="display:none;">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="AnsweredTitle"></h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
