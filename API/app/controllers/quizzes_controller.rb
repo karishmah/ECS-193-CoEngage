@@ -11,12 +11,26 @@ class QuizzesController < ApplicationController
 
 	# GET /courses/:course_id/quizzes/:id
 	def show
-		json_response(@quiz)
+		response = { :quiz => @quiz, :answers => @quiz.answers }.to_json
+		json_response(response)
 	end
 
 	# POST /courses/:course_id/quizzes
 	def create
-		quiz = @course.quizzes.create!(quiz_params)
+		quiz = @course.quizzes.create!(
+			:title => quiz_params[:title],
+			:question => quiz_params[:question],
+			:started => quiz_params[:started],
+			:question_type => quiz_params[:question_type],
+			:course_id => quiz_params[:course_id]
+			)
+		byebug
+		if params[:choices]
+			for i in params[:choices]
+				puts i
+				quiz.answers.create!(:choice => i)
+			end
+		end
 		json_response(quiz, :created)
 	end
 
@@ -36,7 +50,7 @@ class QuizzesController < ApplicationController
 	private
 
 	def quiz_params
-		params.permit(:title, :question, :started, :question_type, :quiz_id, :course_id)
+		params.permit(:title, :question, :started, :question_type, :quiz_id, :course_id, :choices)
 	end
 
 	def set_course

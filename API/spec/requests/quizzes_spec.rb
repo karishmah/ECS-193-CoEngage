@@ -47,7 +47,7 @@ RSpec.describe 'Quizs API' do
 			end
 
 			it 'returns the quiz' do
-				expect(json['id']).to eq(id)
+				expect(json['quiz']['id']).to eq(id)
 			end
 		end
 
@@ -66,7 +66,7 @@ RSpec.describe 'Quizs API' do
 
 	# Test suite for PUT /courses/:course_id/quizzes
 	describe 'POST /courses/:course_id/quizzes' do
-		let(:valid_attributes) { { title: 'Visit Narnia', question: 'How?' }.to_json }
+		let(:valid_attributes) { { title: 'Visit Narnia', question: 'How?', question_type: 'longForm' }.to_json }
 
 		context 'when request attributes are valid' do
 			before { post "/courses/#{course_id}/quizzes", params: valid_attributes, headers: headers }

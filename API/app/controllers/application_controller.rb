@@ -1,5 +1,6 @@
 require 'aws-sdk-s3'
 require 'json'
+require 'byebug'
 class ApplicationController < ActionController::API
 	include Response
 	include ExceptionHandler

@@ -7,7 +7,7 @@ class PostsController < ApplicationController
 
 	# GET    /courses/:course_id/quizzes/:quiz_id/posts
 	def index
-		#TODO Test for picture or other form of answer
+		#TODO Add student info to return
 		if @quiz.question_type = "picture"
 			urls = []
 			for post in @quiz.posts do
@@ -24,7 +24,7 @@ class PostsController < ApplicationController
 
 	# GET    /courses/:course_id/quizzes/:quiz_id/posts/:id 
 	def show
-		#TODO Test for picture or other form of answer
+		#TODO Add student info to return
 		if @quiz.question_type == "picture"
 				post_path = "Photos/#{request.fullpath[ 1 .. request.fullpath.length - 1]}/#{post.id}"
 				obj = @static_storage_bucket.object(post_path)
