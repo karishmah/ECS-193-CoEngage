@@ -24,7 +24,6 @@ class QuizzesController < ApplicationController
 			:question_type => quiz_params[:question_type],
 			:course_id => quiz_params[:course_id]
 			)
-		byebug
 		if params[:choices]
 			for i in params[:choices]
 				puts i

@@ -1,7 +1,7 @@
 require('byebug')
 
 class CoursesController < ApplicationController
-	before_action :set_course, only: [:show, :update, :destroy]
+	before_action :set_course, only: [:show, :update, :destroy, :students]
 
 	# GET /courses
 	def index
@@ -18,6 +18,11 @@ class CoursesController < ApplicationController
 	# GET /courses/:id
 	def show
 		json_response(@course)
+	end
+
+	#GET /courses/:id/students
+	def students
+		json_response(@course.students)
 	end
 
 	# PUT /courses/:id

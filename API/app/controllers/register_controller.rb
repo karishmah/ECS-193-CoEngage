@@ -10,11 +10,9 @@ class RegisterController < ApplicationController
 		csv_text = register_all_params[:roster]
 		csv = CSV.parse(csv_text, :headers => true)
 		course = Course.find_by( professor: current_user.id, title: register_all_params[:title])
-				#byebug
 		csv.each do |row|
 			student = Student.find_by(email: row[2])
 			if student == nil
-				#byebug
 				pass = SecureRandom.hex(4)
 				student = Student.create!({name: row[0], sid: row[1], email: row[2], :password => pass})
 				system("$PWD/email_student   '#{course.title}' '#{current_user.name}' '#{pass}' '#{student.email}' 2>&1 OUTPUT_EMAIL")
