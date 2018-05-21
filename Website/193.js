@@ -7,17 +7,17 @@ function loginAuth(){
     var user= document.getElementById("username").value;
     var pass = document.getElementById("password").value;
     jQuery.post("https://coengage.online/API/auth/login_user", {email:user, password:pass}, function(result, status){
-	if(status==="success"){
+	if(status=="success"){
 		auth_token=result.auth_token;
 		console.log("successful post "+auth_token);
        		 jQuery.ajaxSetup({
 			headers:{'Authorization':auth_token}});
 		mainLoad();
 		}
-	else{
+	else if(!success){
 		document.getElementById("username").value="";
 		document.getElementById("password").value="";
-		loginLoad();
+		alert("Invalid credentials! Try again.");
 	}
     });
 }	
@@ -126,6 +126,8 @@ function closeSidenav(){
         document.getElementById("courseSidebar").style.display="none";
 }
 
+var courseList;
+
 //Load the main course page for the user, Get all the courses and display on the main page
 function mainLoad(){
     document.getElementById("login").style.display="none";
@@ -147,10 +149,32 @@ function mainLoad(){
     //appendChild
     //get the courses for variable of user
     //append to the flex container and to the course sidebar
-    var courseContainer = document.getElementById("flexContainer");
-    var sideContainer = document.getElementById("sidenav2");
+    var courseContainer = document.getElementById("courseMainContainer");
+    var sideContainer = document.getElementById("courseSidebarContainer");
     jQuery.get("https://coengage.online/API/courses", function(data, status){
         console.log("This is data: "+data[0].id+data[0].title+" And this is status: "+status);
+    	if(status){
+		courseList=data;
+		for(var i=0; i<data.length; i++){
+			var btn=document.createElement("button");
+			console.log("created button: "+i);
+			btn.setAttribute("class", "optionButtons");
+			btn.setAttribute("onclick", "coursePage('"+data[i].title+"');");
+			var t=document.createTextNode(data[i].title);
+			console.log("t : "+t);
+			btn.appendChild(t);
+			console.log("appended text node ");
+			courseContainer.append(btn);
+
+			var sidebtn = document.createElement("a");
+			sidebtn.setAttribute("href", "#");
+			sidebtn.setAttribute("id", "courseNav");
+			var t1=document.createTextNode(data[i].title);
+			sidebtn.setAttribute("onclick", "coursePage('"+data[i].title+"'); closeSidenav();");
+			sidebtn.appendChild(t1);
+			sideContainer.appendChild(sidebtn);
+		}
+	}
     });
     //if status is okay
     /*for(var i=0; i<courseList.length; i++)
@@ -170,7 +194,7 @@ function mainLoad(){
         }*/
     //else if status is not normal
         //figure out what to do
-    }
+}
 
 //Load the add course page
 function addCourseLoad(){
@@ -244,9 +268,12 @@ function coursePage(title){
     document.getElementById("displayAnsweredQuestion").style.display="none";
     document.getElementById("displayImageAnsweredQuestion").style.display="none";  
     document.getElementById("main").style.display="none";
-     //gCRN=GET CRN FOR Course with title TITLE
     var x= document.getElementById("coursePageTitle");
     x.textContent=title;
+    for(var i=0; i<courseList.length; i++){
+	    if(courseList[i].title===title)
+		    gCRN=courseList[i].id;
+    }
 }
 
 //Load the students belonging to the course
@@ -265,33 +292,43 @@ function courseStudents(){
     document.getElementById("studentAnswers").style.display="none";
     document.getElementById("displayAnsweredQuestion").style.display="none";
     document.getElementById("displayImageAnsweredQuestion").style.display="none";  
-    //jQuery.get("https://coengage.online/API/
-    /*var students = GET STUDENTS FOR COURSE WITH CRN gCRN
-    var studentDisplay= document.getElementById("studentTable");
-    for(i=0; i<students.length;  i++)
-        {
-        var fname = students[i].fname;
-        var lname = students[i].lname;
-        var id = students[i].id;
-        var email = students[i].email;
-        var row = studentDisplay.insertRow(0);
-        var stGrade = GET ALL GRADES FOR STUDENT i;
-        var numQ = GET num of questions asked for course gCRN;
-        var c1 = row.insertCell(0);
-        c1.textContent=fname;
-        var c2 = row.insertCell(1);
-        c2.textContent=lname;
-        var c3 = row.insertCell(2);
-        c3.textContent=id;
-        var c4 = row.insertCell(3);
-        c4.textContent=email;
-        var c5 = row.insertCell(4);
-        var finalGrade;
-        for(j=0; j<stGrade.length; j++){
-            finalGrade+=stGrade[i];
-        }
-        c5.textContent= (finalGrade/numQ);
-        }*/
+    console.log("gCRN: "+gCRN);
+    var queryURL="https://coengage.online/API/courses/"+gCRN+"/students";
+    jQuery.get(queryURL,function(data, status){
+	    if(status){
+		    var students=data;
+		    var studentDisplay= document.getElementById("studentRosterTable");
+    		    for(i=0; i<data.length;  i++)
+        		{
+    			    var fname = students[i].fname;
+       			    var lname = students[i].lname;
+    			    var id = students[i].id;
+   			    var email = students[i].email;
+     			    var tRow = document.createElement("tr");
+    var tData1 = document.createElement("td");
+    var info1 = document.createTextNode(fname);
+    var tData2 = document.createElement("td");
+    var info2 = document.createTextNode(lname);
+    var tData3 = document.createElement("td");
+    var info3 = document.createTextNode(id);
+    var tData4 = document.createElement("td");
+    var info4 = document.createTextNode(email);
+    var tData5 = document.createElement("td");
+    var info5 = document.createTextNode("98");
+    tData1.appendChild(info1);
+    tData2.appendChild(info2);
+    tData3.appendChild(info3);
+    tData4.appendChild(info4);
+    tData5.appendChild(info5);
+    tRow.appendChild(tData1);
+    tRow.appendChild(tData2);
+    tRow.appendChild(tData3);
+    tRow.appendChild(tData4);
+    tRow.appendChild(tData5);
+    studentDisplay.appendChild(tRow);
+			}
+		   }
+    });
 }
 
 function sortStudentsAlpha(colNum){
@@ -427,12 +464,12 @@ function addStudentRedirect(){
     document.getElementById("studentAnswers").style.display="none";
     document.getElementById("displayAnsweredQuestion").style.display="none";
     document.getElementById("displayImageAnsweredQuestion").style.display="none"; 
-    /*var first = document.getElementById("firstName");
-    var last = document.getElementById("lastName");
-    var idnum = document.getElementById("studentID");
-    var stemail = document.getElementById("email");
-    POST THESE TO COURSE OF CRN NUM gCRN*/
-    //courseStudents();
+    var first = document.getElementById("firstName").value;
+    var last = document.getElementById("lastName").value;
+    var idnum = document.getElementById("studentID").value;
+    var stemail = document.getElementById("email").value;
+    //jQuery.post("https://coengage.online/API/
+    courseStudents();
 }
 
 var getQuestion; 
@@ -472,9 +509,24 @@ function testBankLoad(){
     document.getElementById("displayQuestion").style.display="none";
     document.getElementById("studentAnswers").style.display="none";
     document.getElementById("displayAnsweredQuestion").style.display="none";
-    document.getElementById("displayImageAnsweredQuestion").style.display="none"; 
-    jQuery.get("https://coengage.online/API/courses/8/quizzes", function(result){
-	    console.log("Course 8 quiz is : "+result[0].title);
+    document.getElementById("displayImageAnsweredQuestion").style.display="none";
+    var queryURL="https://coengage.online/API/courses/"+gCRN+"/quizzes";
+    console.log(queryURL);
+    jQuery.get(queryURL, function(result){
+	    var container=document.getElementById("testBankTable");
+	    while(container.rows.length>0)
+		    container.deleteRow(0);
+	    for(var i=0; i<result.length; i++){
+		    var tRow = document.createElement("tr");
+    		    var tData1 = document.createElement("td");
+		    var p1=document.createElement("p");
+		    p1.setAttribute("onclick", "displayQuestionLoad('"+result[i].question+"');");
+		    var info1=document.createTextNode(result[i].question);
+		    p1.appendChild(info1);
+		    tData1.appendChild(p1);
+		    tRow.appendChild(tData1);
+		    container.appendChild(tRow);
+	    }
 	});
     //Get all questions for course
     //Post to the container

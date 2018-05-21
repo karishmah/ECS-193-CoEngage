@@ -26,9 +26,9 @@
         <div class="sidenav2" style="display:none;" id="courseSidebar">
             <br>
             <button onclick="closeSidenav();" style=" position:absolute; top:0; right:0;" class="closebtn">&times;</button>
-            <a href="#" id="courseNav" onclick="coursePage('ECS193B'); closeSidenav();">ECS193B</a>
-            <a href="#" id="courseNav" onclick="coursePage('ECS162'); closeSidenav();">ECS162</a>
-            <a href="#" id="courseNav" onclick="addCourseLoad(); closeSidenav();">Add a new course</a>
+	    <div id="courseSidebarContainer">
+	    </div>
+	    <a href="#" id="courseNav" onclick="addCourseLoad(); closeSidenav();">Add a new course</a>
         </div>
         
         
@@ -73,11 +73,7 @@
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Courses</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <button id="addCourseButton" class="navButton" onclick="addCourseLoad();">Add a new course</button>
-            <div class="flexContainer">
-                <button class="optionButtons" onclick="coursePage('ECS193B');";>ECS193B</button>
-                <button class="optionButtons" onclick="coursePage('ECS162');">ECS162</button>
-                <button class="optionButtons" onclick="coursePage('ECS188');">ECS188</button>
-                <button class="optionButtons" onclick="coursePage('COM53B');">COM53B</button>
+            <div class="flexContainer" id="courseMainContainer">
             </div>
         </div>
 
@@ -96,6 +92,7 @@
                 <input type="text" style="width:900px;" id="CRN">
                 <br><br>
                 Add class roster
+		<br>
                 <input type="text" style="width:900px;" id="courseRoster">
                 <br>
                 <button class="submitButton" onclick="addCourseRedirect();">Submit</button>
@@ -212,7 +209,7 @@
             <br>
             <br>
             <br>
-            <table class="questionBank">
+            <table id="testBankTable"  class="questionBank">
                 <tr><td><p onclick="displayQuestionLoad('Question A');">Question A</p></td></tr>
                 <tr><td><p onclick="displayQuestionLoad('Question B');">Question B</p></td></tr>
                 <tr><td><p onclick="displayQuestionLoad('Question C');">Question C</p></td></tr>

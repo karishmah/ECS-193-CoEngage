@@ -63,6 +63,8 @@ Host: localhost:3000
 
 * API Endpoints
 
+* students_course
+	* GET		/courses/:course_id/students
 * course_quiz_posts 
 	* GET 		/courses/:course_id/quizzes/:quiz_id/posts(.:format) 
 	* POST 	/courses/:course_id/quizzes/:quiz_id/posts(.:format)
@@ -74,7 +76,7 @@ Host: localhost:3000
 	* PUT 		/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)
 	* DELETE 	/courses/:course_id/quizzes/:quiz_id/posts/:id(.:format)
 * course_quizzes	
-	*  GET 		/courses/:course_id/quizzes(.:format)
+	*  GET 	/courses/:course_id/quizzes(.:format)
 	* POST 	/courses/:course_id/quizzes(.:format)
 		* required: title, question, question_type
 		* optional: N/A
@@ -112,6 +114,13 @@ Host: localhost:3000
 					We will send the whole plain text as one http request. This
 					may change later, but is the format for now.
 			* NOTE2: Likely to change once canvas integration is complete
+		* optional: N/A
+* register_student
+	* POST 	/register_students(.:format)
+		* required: email, professor, title
+			* NOTE: email is the email of the student, professor is the name of
+					the professor teaching the course, and title is the title
+					of the course in question.
 		* optional: N/A
 * signup_student
 	* POST 	/signup_student(.:format)
