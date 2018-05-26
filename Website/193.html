@@ -12,11 +12,11 @@
         
         
         <div class="sidenav" style="display:none;" id="sidebar">
-            <center><img src="logo_transparent_background.png" style="width:220px; height=275px;"></center>
+            <center><img src="logo_transparent_background.png" style="width:220px; height=275px;" onclick="mainLoad();"></center>
             &nbsp;&nbsp;<br><br>
             <a href="#" id="navitem" onclick="courseNavLoad();">Courses</a>
             <div class="logoutButton" id="logout">
-                <button type="logButton" class="btn btn-default btn-sm" style="margin-left:50px; background-color: #5DBCD2; border-color: #5DBCD2; margin-bottom: 5px; height:50px; font-size: 18px; color:#ABE9FE;">
+                <button type="logButton" onclick="logoutUser();"  class="btn btn-default btn-sm" style="margin-left:50px; background-color: #5DBCD2; border-color: #5DBCD2; margin-bottom: 5px; height:50px; font-size: 18px; color:#ABE9FE;">
                     <span class="glyphicon glyphicon-log-out"></span> Log Out
                 </button>
             </div>
@@ -39,12 +39,12 @@
                 <hr class="w3-round" style="width:1000%; margin-left: 0; background-color: #5DBCD2; border: 10px solid #5DBCD2;">
                 <div class="loginCSS2">
                     <br><br>
-		    Email: &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <input type="text" id="username">
+		    Email: &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <input type="text" pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" id="username">
                     <br>
                     Password:  <input type="password" id="password">
                     <br><br> 
                     <button id="signup" class="submitButton" onclick="signupLoad();"  style="width:100px;">Sign Up</button>
-                    <button id="submitLogin" class="submitButton" onclick="mainPageRedirect(); loginAuth();" style="width:100px;">Submit</button>
+                    <button id="submitLogin" class="submitButton" onclick="loginAuth();" style="width:100px;">Submit</button>
                 </div>
         </div>
         
@@ -107,6 +107,8 @@
                 <button class="optionButtons" onclick="courseStudents();">Students</button>
                 <button class="optionButtons" onclick="courseTests();">Tests</button>
             </div>
+	    <br><br>
+	    <button class="submitButton" style="background-color:#C24146; margin-left: 450px;" onclick="deleteCourse();">Delete Course</button>
         </div>
         
         
@@ -160,8 +162,27 @@
                     <td>34</td>
                 </tr>
             </table>
+	    <br><br>
+	    <button class="submitButton" style="background-color:#C24146; margin-left:420px;" onclick="deleteStudentLoad();">Delete A Student</button>
         </div>
         
+	<div class="pages" id="deleteStudent" style="display:none;">
+	    <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Delete a student</h1>
+            <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <br>
+	    <div class="formType">
+		Student ID
+                <br>
+                <input type="text" style="width:900px;" id="delstudentID">
+                <br><br>
+                Email
+                <br>
+                <input type="text" style="width:900px;" id="delemail">
+                <br><br>
+                <button class="submitButton" style="background-color:#C24146" onclick="deleteStudentRedirect(); courseStudents();">Delete Student</button>
+            </div>
+       </div>
+
         
         <div class="pages" id="addStudent" style="display:none;" onload="addStudentLoad();">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Add a new student</h1>
@@ -203,6 +224,7 @@
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Test Bank</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <br>
+	    <input type="text" class="searchBar" style="margin-left:420px" id="testBankSearch" onkeyup="searchTestBank();" placeholder="Search...">
             <button id="addQuestionButton" class="navButton" onclick="addQuestionLoad();">Add a new question</button>
             <br>
             <br>
@@ -210,9 +232,6 @@
             <br>
             <br>
             <table id="testBankTable"  class="questionBank">
-                <tr><td><p onclick="displayQuestionLoad('Question A');">Question A</p></td></tr>
-                <tr><td><p onclick="displayQuestionLoad('Question B');">Question B</p></td></tr>
-                <tr><td><p onclick="displayQuestionLoad('Question C');">Question C</p></td></tr>
             </table>
         </div>
 
@@ -233,6 +252,10 @@
             </div>
             <div class="formType" id="textType" style="display:none; font-size: 20px;">
                 <br>
+		Title
+		<br>
+		<input type="text" id="qTitleText" style="width:900px;">
+		<br>
                 Question
                 <br>
                 <input type="text" id="textQuestion" style="width:900px;">
@@ -241,6 +264,10 @@
             </div>
             <div class="formType" id="imageType" style="display:none; font-size:20px;">
                 <br>
+		Title
+                <br>
+                <input type="text" id="qTitleImage" style="width:900px;">
+                <br>
                 Question
                 <br>
                 <input type="text" id="imageQuestion" style="width:900px;">
@@ -248,6 +275,10 @@
                 <button class="submitButton" onclick="addQuestionRedirect('image'); getAllQuestion();">Submit</button>
             </div>
             <div class="formType" id="mcqNumberType" style="display:none; font-size:20px;">
+                <br>
+		Title
+                <br>
+                <input type="text" id="qTitlemcq" style="width:900px;">
                 <br>
                 Question
                 <br>
@@ -270,13 +301,17 @@
         <div class="pages" id="displayQuestion" style="display:none;">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="questionTitle"></h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
-            <br>
-            <button id="askQuestionButton" class="navButton" onclick="askQuestion();">Ask this question</button>
+	    <br><br><br><br><br><br>
+	    <div id="qDisp" class="formType">
+	    </div>
+	    <br><br><br>
+            <button id="askQuestionButton" style="margin-left:450px;" class="submitButton" onclick="askQuestion();">Ask this question</button>
+	    <button class="submitButton" style="background-color:#C24146; margin-left: 450px;" onclick="deleteQuestion();">Delete Question</button>
             <div id="popup">
                 <div id="popupText">
-                    <button id="startQuestion" class="popupButton" style="margin-left: 550px; margin-top: 375px;" onclick="startQ();">Start</button>
-                    <button id="stopQuestion" class="popupButton" style="margin-left: 750px; margin-top: 375px;"  onclick="stopQ();">Stop</button>
-                    <button id="cancelQuestion" class="popupButton" style="margin-left: 950px; margin-top: 375px;"  onclick="cancel();">Cancel</button>
+                    <button id="startQuestion" class="popupButton"  style="margin-top:375px; margin-left: 650px;" onclick="startQ();">Start</button>
+                    <button id="stopQuestion" class="popupButton"  onclick="stopQ();" style="margin-top: 375px; margin-left:850px;">Stop</button>
+                    <button id="cancelQuestion" onclick="cancel();" style=" position:absolute; top:0; right:0;" class="closebtn">&times;</button>
                 </div>
             </div>
         </div>

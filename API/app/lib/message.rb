@@ -31,8 +31,8 @@ class Message
 		'Account could not be created'
 	end
 
-	def self.password_changed
-		'Account password changed successfully'
+	def self.credentials_changed
+		'Account credentials changed successfully'
 	end
 
 	def self.quiz_not_started

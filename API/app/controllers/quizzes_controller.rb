@@ -6,7 +6,12 @@ class QuizzesController < ApplicationController
 
 	# GET /courses/:course_id/quizzes
 	def index
-		json_response(@course.quizzes)
+		if @current_user.is_a?(Student)
+			response = @course.quizzes.where(started: true)
+		else
+			response = @course.quizzes
+		end
+		json_response(response)
 	end
 
 	# GET /courses/:course_id/quizzes/:id
@@ -24,6 +29,9 @@ class QuizzesController < ApplicationController
 			:question_type => quiz_params[:question_type],
 			:course_id => quiz_params[:course_id]
 			)
+		if quiz_params[:started]
+			quiz.asked = true
+		end
 		if params[:choices]
 			for i in params[:choices]
 				puts i
@@ -36,6 +44,9 @@ class QuizzesController < ApplicationController
 	# PUT /courses/:course_id/quizzes/:id
 	def update
 		@quiz.update(quiz_params)
+		if quiz_params[:started]
+			@quiz.update({ :asked => true})
+		end
 		head :no_content
 	end
 

@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 		# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 		resources :courses do
 			get 'students', on: :member
+			get 'student_posts', on: :member
+			post 'drop_student', on: :member
 				resources :quizzes do
 					resources :posts
 				end
@@ -15,4 +17,6 @@ Rails.application.routes.draw do
 		post 'signup_student', to: 'students#create'
 		put 'change_student_password', to: 'students#update'
 		put 'change_user_password', to: 'users#update'
+		post 'forgot_student_password', to: 'studentss#password_reset'
+		post 'forgot_user_password', to: 'users#password_reset'
 end

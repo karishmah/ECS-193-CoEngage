@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180517043415) do
+ActiveRecord::Schema.define(version: 20180523001233) do
 
   create_table "answers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "choice"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20180517043415) do
     t.datetime "updated_at", null: false
     t.boolean "started"
     t.string "question_type"
+    t.boolean "asked"
     t.index ["course_id"], name: "index_quizzes_on_course_id"
   end
 

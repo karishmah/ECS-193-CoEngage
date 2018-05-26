@@ -12,12 +12,19 @@ class StudentsController < ApplicationController
 		json_response(response, :created)
 	end
 
-	# PUT /update_student_password
+	# PUT /update_student
 	def update
-		current_user.update!({ :password => student_params[:password]})
+		current_user.update!({ :password => student_params[:password], :email => student_params[:email]})
 		auth_token = AuthenticateStudent.new(current_user.email, current_user.password).call
-		response = { message: Message.password_changed, auth_token: auth_token}
+		response = { message: Message.credentials_changed, auth_token: auth_token}
 		json_response(response, :created)
+	end
+
+	# POST /forgot_student_password
+	def password_reset
+		pass = SecureRandom.hex(4)
+		student = Student.update!({:password => pass})
+		system("$PWD/forgot_password   '#{pass}' '#{student.email}' 2>&1 OUTPUT_EMAIL")
 	end
 
 	private

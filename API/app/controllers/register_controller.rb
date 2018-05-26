@@ -27,8 +27,7 @@ class RegisterController < ApplicationController
 	# POST /register_student
 	def register
 		student = Student.find_by(email: register_params[:email])
-		professor = User.find_by(name: register_params[:professor])
-		course = Course.find_by(professor: professor.id, title: register_params[:title])
+		course = Course.find(register_params[:course_id])
 		if student == nil
 			response = {message: Message.not_found('Student')}
 		elsif course == nil
@@ -52,12 +51,12 @@ class RegisterController < ApplicationController
 	end
 	
 	def register_params
-		params.require(:title)
-		params.require(:professor)
+		params.require(:course_id)
 		params.require(:email)
 		params.permit(
-			:title,
-			:professor,
+			:name,
+			:sid,
+			:course_id,
 			:email
 		)
 	end

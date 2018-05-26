@@ -1,7 +1,8 @@
 require('byebug')
 
 class CoursesController < ApplicationController
-	before_action :set_course, only: [:show, :update, :destroy, :students]
+	before_action :set_course, only: [:show, :update, :destroy, 
+								:students, :student_posts, :drop_student]
 
 	# GET /courses
 	def index
@@ -22,7 +23,31 @@ class CoursesController < ApplicationController
 
 	#GET /courses/:id/students
 	def students
-		json_response(@course.students)
+		#TODO add number of posts for the course to the return, may require 
+		# adding course_id to the post (if it requires too much overhead to
+		# test for the course id based on the quiz
+		json_response(@course.students.select(:email, :name, :sid))
+	end
+
+	#GET /courses/:id/student_posts
+	def student_posts
+		posts = []
+		for student in @course.students
+			#If we need student along with posts
+			#posts << student
+			posts << student.posts
+		end
+		json_response(posts)
+	end
+
+	def drop_student
+		student = @course.students.find_by(student_params[:sid])
+		if student
+			@course.students.delete(student)
+		else
+			json_response(Message.not_found("student"), 404)
+		end
+
 	end
 
 	# PUT /courses/:id
@@ -42,6 +67,10 @@ class CoursesController < ApplicationController
 	def course_params
 		# whitelist params
 		params.permit(:title, :description)
+	end
+
+	def student_params
+		params.permit(:sid)
 	end
 
 	def set_course

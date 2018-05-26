@@ -37,8 +37,7 @@ RSpec.describe 'Courses API', type: :request do
 				# make HTTP post request before each example
 				let (:valid_credentials) do 
 					{
-						title: course_title,
-						professor: course_prof.name,
+						course_id: course_id,
 						email: student.email
 						
 					}.to_json

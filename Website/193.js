@@ -1,12 +1,20 @@
 var gCRN;
 var courseData;
 var auth_token;
+
+function logoutUser(){
+	console.log("Logged out user");
+	jQuery.ajaxSetup({
+		headers:{'Authorization':""}});
+	loginLoad();
+}
+
 //authenticate the user credentials and set the header as the authentication token
 function loginAuth(){
     console.log("Inside loginAuth();");
     var user= document.getElementById("username").value;
     var pass = document.getElementById("password").value;
-    jQuery.post("https://coengage.online/API/auth/login_user", {email:user, password:pass}, function(result, status){
+    /*jQuery.post("https://coengage.online/API/auth/login_user", {email:user, password:pass}, function(result, status){
 	if(status=="success"){
 		auth_token=result.auth_token;
 		console.log("successful post "+auth_token);
@@ -14,20 +22,45 @@ function loginAuth(){
 			headers:{'Authorization':auth_token}});
 		mainLoad();
 		}
-	else if(!success){
+	else{
 		document.getElementById("username").value="";
 		document.getElementById("password").value="";
 		alert("Invalid credentials! Try again.");
 	}
+    });*/
+  $.ajax({
+	  url:"https://coengage.online/API/auth/login_user", 
+	  type:'post',
+	  data:{email:user, password:pass}, 
+	  success: function(result, status){
+                auth_token=result.auth_token;
+                console.log("successful post "+auth_token);
+                 var courseContainer = document.getElementById("courseMainContainer");
+                        $('#courseMainContainer').empty();
+                        var sideContainer = document.getElementById("courseSidebarContainer");
+                        $('#courseSidebarContainer').empty(); 
+		jQuery.ajaxSetup({
+                        headers:{'Authorization':auth_token}});
+                mainLoad();
+                },
+	  error: function(result){
+                document.getElementById("username").value="";
+                document.getElementById("password").value="";
+                alert("Invalid credentials! Try again.");
+        }
     });
 }	
 
 
 //function to load login page
 function loginLoad(){
+    document.getElementById("username").value="";
+    document.getElementById("password").value="";
     document.getElementById("login").style.display="block";
     document.getElementById("signupPage").style.display="none";
     document.getElementById("main").style.display="none";
+    document.getElementById("sidebar").style.display="none";
+    document.getElementById("courseSidebar").style.display="none";
     document.getElementById("addCourse").style.display="none";
     document.getElementById("courseMainPage").style.display="none";
     document.getElementById("students").style.display="none";
@@ -134,6 +167,7 @@ function mainLoad(){
     document.getElementById("signupPage").style.display="none";
     document.getElementById("main").style.display="block";
     document.getElementById("addCourse").style.display="none";
+    document.getElementById("sidebar").style.display="block";
     document.getElementById("courseMainPage").style.display="none";
     document.getElementById("students").style.display="none";
     document.getElementById("addStudent").style.display="none";
@@ -152,18 +186,20 @@ function mainLoad(){
     var courseContainer = document.getElementById("courseMainContainer");
     var sideContainer = document.getElementById("courseSidebarContainer");
     jQuery.get("https://coengage.online/API/courses", function(data, status){
-        console.log("This is data: "+data[0].id+data[0].title+" And this is status: "+status);
     	if(status){
+		while(courseContainer.firstChild){
+			courseContainer.removeChild(courseContainer.firstChild);
+		}
+		while(sideContainer.firstChild){
+			sideContainer.removeChild(sideContainer.firstChild);
+		}
 		courseList=data;
 		for(var i=0; i<data.length; i++){
 			var btn=document.createElement("button");
-			console.log("created button: "+i);
 			btn.setAttribute("class", "optionButtons");
 			btn.setAttribute("onclick", "coursePage('"+data[i].title+"');");
 			var t=document.createTextNode(data[i].title);
-			console.log("t : "+t);
 			btn.appendChild(t);
-			console.log("appended text node ");
 			courseContainer.append(btn);
 
 			var sidebtn = document.createElement("a");
@@ -229,11 +265,36 @@ function addCourseRedirect(){
 		    console.log("course roster: "+courseRoster);
 	    }
     }*/
-    jQuery.post("https://coengage.online/API/courses", {title: courseTitle,description: "this is description"}, function(result){console.log(courseTitle+" course posted succesfully");});
-    jQuery.post("https://coengage.online/API/register_students", {title: courseTitle, roster:courseRos}, function(result){console.log(courseTitle+" course roster posted succesfully");});
-    mainLoad();
-    //POST ALL THESE TO THE DATABASE
-    //mainLoad();
+    $.ajax({
+	url: "https://coengage.online/API/courses", 
+	type: 'post',
+	data: {title: courseTitle, description: "this is description"}, 
+        success: function(result){
+			console.log(courseTitle+" course posted succesfully");
+    			jQuery.post("https://coengage.online/API/register_students", {title: courseTitle, roster:courseRos}, function(result){console.log(courseTitle+" course roster posted succesfully");});	
+			var courseContainer = document.getElementById("courseMainContainer");
+    			$('#courseMainContainer').empty();
+    			var sideContainer = document.getElementById("courseSidebarContainer");
+    			$('#courseSidebarContainer').empty();
+    			var btn=document.createElement("button");
+                        btn.setAttribute("class", "optionButtons");
+                        btn.setAttribute("onclick", "coursePage('"+courseTitle+"');");
+                        var t=document.createTextNode(courseTitle);
+                        btn.appendChild(t);
+                        courseContainer.append(btn);
+
+                        var sidebtn = document.createElement("a");
+                        sidebtn.setAttribute("href", "#");
+                        sidebtn.setAttribute("id", "courseNav");
+                        var t1=document.createTextNode(courseTitle);
+                        sidebtn.setAttribute("onclick", "coursePage('"+courseTitle+"'); closeSidenav();");
+                        sidebtn.appendChild(t1);
+                        sideContainer.appendChild(sidebtn);
+           		document.getElementById("courseTitle").value="";
+			document.getElementById("courseRoster").value="";
+			document.getElementById("CRN").value="";
+    			mainLoad();
+	}});
 }
 
 //Don't need this beyond testing
@@ -250,7 +311,7 @@ function mainPageRedirect(){
             document.getElementById("main").style.display="block";});
 }
 */
-                                
+var gTitle; 
 //Load the course page with the divs of students and tests
 function coursePage(title){
     document.getElementById("login").style.display="none";
@@ -271,14 +332,28 @@ function coursePage(title){
     var x= document.getElementById("coursePageTitle");
     x.textContent=title;
     for(var i=0; i<courseList.length; i++){
-	    if(courseList[i].title===title)
+	    if(courseList[i].title===title){
+		    gTitle=title;
 		    gCRN=courseList[i].id;
+	    }
     }
+}
+
+function deleteCourse(){
+	$.ajax({
+		url: "https://coengage.online/API/courses/"+gCRN, 
+		type: 'delete',
+		success: function(result){
+			console.log("Deleted course");
+			mainLoad();
+		}
+	});
 }
 
 //Load the students belonging to the course
 function courseStudents(){
     document.getElementById("login").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("signupPage").style.display="none";
     document.getElementById("main").style.display="none";
     document.getElementById("addCourse").style.display="none";
@@ -290,6 +365,7 @@ function courseStudents(){
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="none";
     document.getElementById("studentAnswers").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("displayAnsweredQuestion").style.display="none";
     document.getElementById("displayImageAnsweredQuestion").style.display="none";  
     console.log("gCRN: "+gCRN);
@@ -300,9 +376,9 @@ function courseStudents(){
 		    var studentDisplay= document.getElementById("studentRosterTable");
     		    for(i=0; i<data.length;  i++)
         		{
-    			    var fname = students[i].fname;
+    			    var fname = students[i].name;
        			    var lname = students[i].lname;
-    			    var id = students[i].id;
+    			    var id = students[i].sid;
    			    var email = students[i].email;
      			    var tRow = document.createElement("tr");
     var tData1 = document.createElement("td");
@@ -430,6 +506,49 @@ function searchStudents(){
     }
 }
 
+function searchTestBank(){
+	var input, filter, table, tr, td, i;
+	input=document.getElementById("testBankSearch");
+	filter = input.value.toUpperCase();
+    	table = document.getElementById("testBankTable");
+	tr = table.getElementsByTagName("tr");
+    	for (i = 0; i < tr.length; i++) {
+        	td = tr[i].getElementsByTagName("td")[0];
+		if (td) {
+            		if (td.innerHTML.toUpperCase().indexOf(filter) > -1 || td===input)
+				tr[i].style.display = "";
+			else
+				tr[i].style.display = "none";
+		}
+	}
+}
+
+function deleteStudentLoad(){
+    document.getElementById("login").style.display="none";
+    document.getElementById("signupPage").style.display="none";
+    document.getElementById("main").style.display="none";
+    document.getElementById("addCourse").style.display="none";
+    document.getElementById("courseMainPage").style.display="none";
+    document.getElementById("students").style.display="none";
+    document.getElementById("addStudent").style.display="none";
+    document.getElementById("tests").style.display="none";
+    document.getElementById("testBank").style.display="none";
+    document.getElementById("addQuestion").style.display="none";
+    document.getElementById("displayQuestion").style.display="none";
+    document.getElementById("studentAnswers").style.display="none";
+    document.getElementById("displayAnsweredQuestion").style.display="none";
+    document.getElementById("displayImageAnsweredQuestion").style.display="none";
+    document.getElementById("deleteStudent").style.display="block";
+}
+
+function deleteStudentRedirect(){
+    var email=document.getElementById("delemail").value;
+    var id=document.getElementById("delstudentID").value;
+    //delete from database
+    document.getElementById("deleteStudent").style.display="none";
+    courseStudents();
+}
+
 //Load the add a student page
 function addStudentLoad(){
     document.getElementById("login").style.display="none";
@@ -446,6 +565,8 @@ function addStudentLoad(){
     document.getElementById("studentAnswers").style.display="none";
     document.getElementById("displayAnsweredQuestion").style.display="none";
     document.getElementById("displayImageAnsweredQuestion").style.display="none"; 
+    document.getElementById("deleteStudent").style.display="none";
+
 }
 
 //Post the student data and go back to the students page
@@ -468,13 +589,27 @@ function addStudentRedirect(){
     var last = document.getElementById("lastName").value;
     var idnum = document.getElementById("studentID").value;
     var stemail = document.getElementById("email").value;
+    $.ajax({
+	   url:'https://coengage.online/API/register_student',
+	   type:'post',
+	   data:{course_id: gCRN, name:first+" "+last, sid:idnum, email:stemail},
+	   success:function(){
+		   console.log("added student");
+		   var studentDisplay= document.getElementById("studentRosterTable");
+		   $('#studentRosterTable').empty();
+		   courseStudents();
+	   }//may have to add the student here and then redirect
+    });
     //jQuery.post("https://coengage.online/API/
     courseStudents();
 }
 
+var gID;
 var getQuestion; 
 var mcqAnswers;
-var currQuestion;
+var currTitle;
+var ques;
+var courseQuizzes;
 
 //Load the course tests page with the divs of test bank and student work
 function courseTests(){
@@ -514,22 +649,21 @@ function testBankLoad(){
     console.log(queryURL);
     jQuery.get(queryURL, function(result){
 	    var container=document.getElementById("testBankTable");
+	    courseQuizzes=result;
 	    while(container.rows.length>0)
 		    container.deleteRow(0);
 	    for(var i=0; i<result.length; i++){
 		    var tRow = document.createElement("tr");
     		    var tData1 = document.createElement("td");
 		    var p1=document.createElement("p");
-		    p1.setAttribute("onclick", "displayQuestionLoad('"+result[i].question+"');");
-		    var info1=document.createTextNode(result[i].question);
+		    p1.setAttribute("onclick", "displayQuestionLoad('"+result[i].title+"','"+result[i].question+"','"+result[i].id+"');");
+		    var info1=document.createTextNode(result[i].title);
 		    p1.appendChild(info1);
 		    tData1.appendChild(p1);
 		    tRow.appendChild(tData1);
 		    container.appendChild(tRow);
 	    }
 	});
-    //Get all questions for course
-    //Post to the container
 }
 
 //Load the addQuestion page
@@ -552,7 +686,6 @@ function addQuestionLoad(){
 
 //If text type is selected
 function textLoad(){
-    getQuestion=document.getElementById("textQuestion").value;
     document.getElementById("imgSel").checked=false;
     document.getElementById("mcqSel").checked=false;
     document.getElementById("textType").style.display="block";
@@ -563,7 +696,6 @@ function textLoad(){
 
 //If image type is selected
 function imageLoad(){
-    getQuestion=document.getElementById("imageQuestion").value;
     document.getElementById("textSel").checked=false;
     document.getElementById("mcqSel").checked=false;
     document.getElementById("textType").style.display="none";
@@ -574,8 +706,7 @@ function imageLoad(){
 
 //If mcq type is selected
 function mcqLoad(){
-    getQuestion=document.getElementById("mcqQuestion").value;
-    mcqAnswers=document.getElementById("mcqAnswer").value;
+ //   mcqAnswers=document.getElementById("mcqAnswer").value;
     document.getElementById("textSel").checked=false;
     document.getElementById("imgSel").checked=false;
     document.getElementById("textType").style.display="none";
@@ -595,10 +726,10 @@ function addfields(){
     for(i=0; i<numInput;i++){
         container.appendChild(document.createTextNode("Option: " + (i+1)+" "));
         var input=document.createElement("input");
-        input.type="text";
-        input.class="mcqAnswer";
-        //input.id="option"+i;
-        input.style="width:900px;"
+        input.setAttribute("type","text");
+        input.setAttribute("class", "mcqAnswer");
+        input.setAttribute("id","option"+i);
+        input.setAttribute("style","width:900px");
         container.appendChild(input);
         container.appendChild(document.createElement("br"));
     }
@@ -608,7 +739,60 @@ function addfields(){
 
 //Post form data and redirect to test bank page
 function addQuestionRedirect(typeQuestion){
-    document.getElementById("login").style.display="none";
+   	//var qTitle=document.getElementById("qTitle").value; 
+	if(typeQuestion=="mcq"){
+		getQuestion=document.getElementById("mcqQuestion").value;
+        	var qTitle=document.getElementById("qTitlemcq").value;
+		$.ajax({
+			url:"https://coengage.online/API/courses/"+gCRN+"/quizzes",
+			type:'post',
+			data:{title: qTitle, question: getQuestion, question_type: 'multiChoice'}, 
+			success:function(result){
+				document.getElementById("textSel").checked=false;
+    				document.getElementById("imgSel").checked=false;
+				document.getElementById("mcqQuestion").value="";
+				document.getElementById("numMcqOpt").value="";
+				testBankLoad();
+            			console.log("Question posted successfully to course "+gCRN);
+        		}});
+            }
+	else if(typeQuestion=="text"){
+		var qTitle=document.getElementById("qTitleText").value;
+                getQuestion=document.getElementById("textQuestion").value;
+                $.ajax({
+                        url:"https://coengage.online/API/courses/"+gCRN+"/quizzes", 
+                        type:'post',
+                        data:{title: qTitle, question: getQuestion, question_type: 'longForm'}, 
+                        success:function(result){
+                                document.getElementById("mcqSel").checked=false;
+                                document.getElementById("imgSel").checked=false;
+                                document.getElementById("textQuestion").value="";
+                                testBankLoad();
+                                console.log("Question posted successfully to course "+gCRN);
+                        }});
+            }
+	else if(typeQuestion=="image"){
+		var qTitle=document.getElementById("qTitleImage").value;
+                getQuestion=document.getElementById("imageQuestion").value;
+                $.ajax({
+                        url:"https://coengage.online/API/courses/"+gCRN+"/quizzes", 
+                        type:'post',
+                        data:{title: qTitle, question: getQuestion, question_type: 'picture'}, 
+                        success:function(result){
+                                document.getElementById("textSel").checked=false;
+                                document.getElementById("mcqSel").checked=false;
+                                document.getElementById("imageQuestion").value="";
+                                testBankLoad();
+                                console.log("Question posted successfully to course "+gCRN);
+                        }});
+            }
+	else{
+		console.log("Unsuccessful quiz post");
+	}
+
+
+   
+    /*document.getElementById("login").style.display="none";
     document.getElementById("signupPage").style.display="none";
     document.getElementById("main").style.display="none";
     document.getElementById("addCourse").style.display="none";
@@ -621,20 +805,15 @@ function addQuestionRedirect(typeQuestion){
     document.getElementById("displayQuestion").style.display="none";
     document.getElementById("studentAnswers").style.display="none";
     document.getElementById("displayAnsweredQuestion").style.display="none";
-    document.getElementById("displayImageAnsweredQuestion").style.display="none";  
-    jQuery.post("https://coengage.online/API/courses/8/quizzes", {title: "Slide 3", question: "getQuestion", question_type: typeQuestion}, function(result){
-	    console.log("Question posted successfully to course 8: "+getQuestion);
-    });
-    //POST typeQuestion to course with crn gCRN;
-    //POST getQuestion
-    //if typeQuestion == "mcq"
-    //POST mcqAnswers
-    testBankLoad();
+    document.getElementById("displayImageAnsweredQuestion").style.display="none"; 
+    */
 }
 
 //Load the question page
-function displayQuestionLoad(question){
-    currQuestion=question;
+function displayQuestionLoad(title,question,id){
+    currTitle=title;
+    gID=id;
+    ques=question;
     document.getElementById("login").style.display="none";
     document.getElementById("signupPage").style.display="none";
     document.getElementById("main").style.display="none";
@@ -650,34 +829,76 @@ function displayQuestionLoad(question){
     document.getElementById("displayAnsweredQuestion").style.display="none";
     document.getElementById("displayImageAnsweredQuestion").style.display="none";  
     var x= document.getElementById("questionTitle");
-    x.textContent=currQuestion;
-    //GET question type
+    x.textContent=currTitle;
+    var qDisplay=document.createTextNode(ques);
+    $('#qDisp').empty();
+    document.getElementById("qDisp").appendChild(qDisplay);
     //if type==mcq
     //GET mcqAnswers
     //for i=0 i<mcqAnswers.length i++
     //container.appendChild(mcqAnswers[i]);
 }
 
+function deleteQuestion(){
+	$.ajax({
+		url:'https://coengage.online/API/courses/'+gCRN+'/quizzes/'+gID,
+		type:'delete',
+		success:function(){
+			console.log("Deleted question successfully");
+			$('#testBankTable').empty();
+			testBankLoad();
+	}	
+	});
+}
+var startedQ=false;
+var stoppedQ=true;
 //if user wants to ask the question
 function askQuestion(){
-    document.getElementById("popup").style.display="block";
+    	document.getElementById("popup").style.display="block";
 }
 
 //if user wants to cancel asking the question
 function cancel(){ //be able to cancel only if not started or it is stopped
-    document.getElementById("popup").style.display="none";
+    if(startedQ==false&& stoppedQ==true)
+	document.getElementById("popup").style.display="none";
 }
 
 //sending response to start projecting to apps
 function startQ(){
+	  $.ajax({
+                url:'https://coengage.online/API/courses/'+gCRN+'/quizzes/'+gID,
+                type:'put',
+                data:{started: 'true'},
+                success:function(){
+                        console.log("Started question!");
+			startedQ=true;
+		}
+	  });
+
     //send response to server to start asking
     //send question marked as asked
 }
 
 //sending response to stop projecting to apps
 function stopQ(){
+	if(startedQ==true){
+          	$.ajax({
+                	url:'https://coengage.online/API/courses/'+gCRN+'/quizzes/'+gID,
+                	type:'put',
+                	data:{started: 'false'},
+                	success:function(){
+                        	console.log("Stopped question!");
+                        	startedQ=false;
+				document.getElementById("popup").style.display="none";
+				stoppedQ=true;
+                	}
+          	});
+	}
+	else{
+		alert("Quiz has not been started yet!");
+	}
+        
     //send response to server to stop asking
-    document.getElementById("popup").style.display="none";
 }
 
 //Load the student work page
