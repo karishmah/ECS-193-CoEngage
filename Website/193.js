@@ -65,6 +65,7 @@ function loginLoad(){
     document.getElementById("courseMainPage").style.display="none";
     document.getElementById("students").style.display="none";
     document.getElementById("addStudent").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("tests").style.display="none";
     document.getElementById("testBank").style.display="none";
     document.getElementById("addQuestion").style.display="none";
@@ -114,6 +115,7 @@ function signupLoad(){
     document.getElementById("students").style.display="none";
     document.getElementById("addStudent").style.display="none";
     document.getElementById("tests").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("testBank").style.display="none";
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="none";
@@ -171,7 +173,8 @@ function mainLoad(){
     document.getElementById("courseMainPage").style.display="none";
     document.getElementById("students").style.display="none";
     document.getElementById("addStudent").style.display="none";
-    document.getElementById("tests").style.display="none";
+    document.getElementById("tests").style.display="none"; 
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("testBank").style.display="none";
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="none";
@@ -242,6 +245,7 @@ function addCourseLoad(){
     document.getElementById("students").style.display="none";
     document.getElementById("addStudent").style.display="none";
     document.getElementById("tests").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("testBank").style.display="none";
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="none";
@@ -322,6 +326,7 @@ function coursePage(title){
     document.getElementById("students").style.display="none";
     document.getElementById("addStudent").style.display="none";
     document.getElementById("tests").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("testBank").style.display="none";
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="none";
@@ -362,6 +367,7 @@ function courseStudents(){
     document.getElementById("addStudent").style.display="none";
     document.getElementById("tests").style.display="none";
     document.getElementById("testBank").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="none";
     document.getElementById("studentAnswers").style.display="none";
@@ -485,12 +491,11 @@ function searchStudents(){
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[0];
-        td1 = tr[i].getElementsByTagName("td")[1];
-        td2 = tr[i].getElementsByTagName("td")[2];
-        td3 = tr[i].getElementsByTagName("td")[3];
-        td4 = tr[i].getElementsByTagName("td")[4];
+        td2 = tr[i].getElementsByTagName("td")[1];
+        td3 = tr[i].getElementsByTagName("td")[2];
+        td4 = tr[i].getElementsByTagName("td")[3];
         if (td) {
-            if (td.innerHTML.toUpperCase().indexOf(filter) > -1 || td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
                 tr[i].style.display = "";
             } 
             else if(td3===input){
@@ -560,6 +565,7 @@ function addStudentLoad(){
     document.getElementById("addStudent").style.display="block";
     document.getElementById("tests").style.display="none";
     document.getElementById("testBank").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="none";
     document.getElementById("studentAnswers").style.display="none";
@@ -578,6 +584,7 @@ function addStudentRedirect(){
     document.getElementById("courseMainPage").style.display="none";
     document.getElementById("students").style.display="block";
     document.getElementById("addStudent").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("tests").style.display="none";
     document.getElementById("testBank").style.display="none";
     document.getElementById("addQuestion").style.display="none";
@@ -606,7 +613,8 @@ function addStudentRedirect(){
 
 var gID;
 var getQuestion; 
-var mcqAnswers;
+var mcqAnswers=[];
+var currType;
 var currTitle;
 var ques;
 var courseQuizzes;
@@ -622,6 +630,7 @@ function courseTests(){
     document.getElementById("addStudent").style.display="none";
     document.getElementById("tests").style.display="block";
     document.getElementById("testBank").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="none";
     document.getElementById("studentAnswers").style.display="none";
@@ -642,6 +651,7 @@ function testBankLoad(){
     document.getElementById("testBank").style.display="block";
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("studentAnswers").style.display="none";
     document.getElementById("displayAnsweredQuestion").style.display="none";
     document.getElementById("displayImageAnsweredQuestion").style.display="none";
@@ -656,7 +666,10 @@ function testBankLoad(){
 		    var tRow = document.createElement("tr");
     		    var tData1 = document.createElement("td");
 		    var p1=document.createElement("p");
-		    p1.setAttribute("onclick", "displayQuestionLoad('"+result[i].title+"','"+result[i].question+"','"+result[i].id+"');");
+		    if(result[i].question_type=="multiChoice")
+		    	p1.setAttribute("onclick", "displayQuestionLoadMCQ('"+result[i].answers+"','"+result[i].title+"','"+result[i].question+"','"+result[i].id+"','"+result[i].question_type+"');");
+		    else
+		        p1.setAttribute("onclick", "displayQuestionLoad('"+result[i].title+"','"+result[i].question+"','"+result[i].id+"','"+result[i].question_type+"');");
 		    var info1=document.createTextNode(result[i].title);
 		    p1.appendChild(info1);
 		    tData1.appendChild(p1);
@@ -676,6 +689,7 @@ function addQuestionLoad(){
     document.getElementById("students").style.display="none";
     document.getElementById("addStudent").style.display="none";
     document.getElementById("tests").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("testBank").style.display="none";
     document.getElementById("addQuestion").style.display="block";
     document.getElementById("displayQuestion").style.display="none";
@@ -706,7 +720,11 @@ function imageLoad(){
 
 //If mcq type is selected
 function mcqLoad(){
- //   mcqAnswers=document.getElementById("mcqAnswer").value;
+    /*for(var i=0; i<numInput; i++){
+	    var currInput=document.getElementById("option"+i);
+	    mcqAnswers.push(currInput);
+	    console.log(mcqAnswers[i]);
+    }*/
     document.getElementById("textSel").checked=false;
     document.getElementById("imgSel").checked=false;
     document.getElementById("textType").style.display="none";
@@ -715,10 +733,11 @@ function mcqLoad(){
     document.getElementById("mcqNumberType").style.display="block";
 }
 
+var numInput;
 //Add number of mcq answer fields dynamically
 function addfields(){
     document.getElementById("mcqNumberType").style.display="none";
-    var numInput = document.getElementById("numMcqOpt").value;
+    numInput = document.getElementById("numMcqOpt").value;
     var container = document.getElementById("mcqOptsType");
     container.textContent=numInput;
         container.removeChild(container.lastChild);
@@ -741,17 +760,26 @@ function addfields(){
 function addQuestionRedirect(typeQuestion){
    	//var qTitle=document.getElementById("qTitle").value; 
 	if(typeQuestion=="mcq"){
+		 for(var i=0; i<numInput; i++){
+     		       var currInput=document.getElementById("option"+i).value;
+         	       mcqAnswers.push(currInput);
+           	       console.log(mcqAnswers[i]);
+    		}
+
 		getQuestion=document.getElementById("mcqQuestion").value;
         	var qTitle=document.getElementById("qTitlemcq").value;
 		$.ajax({
 			url:"https://coengage.online/API/courses/"+gCRN+"/quizzes",
 			type:'post',
-			data:{title: qTitle, question: getQuestion, question_type: 'multiChoice'}, 
+			data:{title: qTitle, question: getQuestion, answers: mcqAnswers, question_type: 'multiChoice'}, 
 			success:function(result){
 				document.getElementById("textSel").checked=false;
     				document.getElementById("imgSel").checked=false;
 				document.getElementById("mcqQuestion").value="";
 				document.getElementById("numMcqOpt").value="";
+				for(i=0; i<numInput; i++){
+					document.getElementById("option"+i).value="";
+				}
 				testBankLoad();
             			console.log("Question posted successfully to course "+gCRN);
         		}});
@@ -809,11 +837,72 @@ function addQuestionRedirect(typeQuestion){
     */
 }
 
+
+function displayQuestionLoad( title, question, id, type){
+currTitle=title;
+    gID=id;
+    currType=type;
+    ques=question;
+    console.log(currTitle+gID+currType+ques);
+    for(i=0; i<courseQuizzes.length; i++){
+            if(courseQuizzes[i].id==gID){
+                    if(courseQuizzes[i].asked=='1'){
+                            document.getElementById("answersRedirectButton").style.display="block";
+                   	    if(currType=="picture"){
+				var btn=document.getElementById("answersRedirectButton");
+                           	btn.setAttribute("onclick", "displayImageAnsQuestionLoad('"+currTitle+"','"+ques+"','"+gID+"','"+currType+"');");
+		    		}
+			    else{
+				    var btn=document.getElementById("answersRedirectButton");
+                            btn.setAttribute("onclick", "displayAnsQuestionLoad('"+currTitle+"','"+ques+"','"+gID+"','"+currType+"');");
+		   	}
+		    }
+		    else
+                            document.getElementById("answersRedirectButton").style.display="none";
+            }
+
+    }
+    document.getElementById("login").style.display="none";
+    document.getElementById("signupPage").style.display="none";
+    document.getElementById("main").style.display="none";
+    document.getElementById("addCourse").style.display="none";
+    document.getElementById("courseMainPage").style.display="none";
+    document.getElementById("students").style.display="none";
+    document.getElementById("addStudent").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
+    document.getElementById("tests").style.display="none";
+    document.getElementById("testBank").style.display="none";
+    document.getElementById("addQuestion").style.display="none";
+    document.getElementById("displayQuestion").style.display="block";
+    document.getElementById("studentAnswers").style.display="none";
+    document.getElementById("displayAnsweredQuestion").style.display="none";
+    document.getElementById("displayImageAnsweredQuestion").style.display="none";
+    var x= document.getElementById("questionTitle");
+    x.textContent=currTitle;
+    var qDisplay=document.createTextNode(ques);
+    $('#qDisp').empty();
+    document.getElementById("qDisp").appendChild(qDisplay);
+}
+
 //Load the question page
-function displayQuestionLoad(title,question,id){
+function displayQuestionLoadMCQ(answers,title,question,id, type){
     currTitle=title;
     gID=id;
+    currType=type;
     ques=question;
+    console.log(currTitle+gID+currType+ques);
+    for(i=0; i<courseQuizzes.length; i++){
+	    if(courseQuizzes[i].id==gID){
+		    if(courseQuizzes[i].asked=='1'){
+			    document.getElementById("answersRedirectButton").style.display="block";
+			    var btn=document.getElementById("answersRedirectButton");
+			    btn.setAttribute("onclick", "displayAnsQuestionLoad('"+currTitle+"','"+ques+"','"+gID+"','"+currType+"');");
+		    }
+	    	   else
+		            document.getElementById("answersRedirectButton").style.display="none";
+	    }
+
+    }
     document.getElementById("login").style.display="none";
     document.getElementById("signupPage").style.display="none";
     document.getElementById("main").style.display="none";
@@ -822,6 +911,7 @@ function displayQuestionLoad(title,question,id){
     document.getElementById("students").style.display="none";
     document.getElementById("addStudent").style.display="none";
     document.getElementById("tests").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("testBank").style.display="none";
     document.getElementById("addQuestion").style.display="none";
     document.getElementById("displayQuestion").style.display="block";
@@ -833,6 +923,16 @@ function displayQuestionLoad(title,question,id){
     var qDisplay=document.createTextNode(ques);
     $('#qDisp').empty();
     document.getElementById("qDisp").appendChild(qDisplay);
+     document.getElementById("qDisp").appendChild(document.createElement("br"));
+    jQuery.get("https://coengage.online/API/courses/"+gCRN+"/quizzes/"+gID, function(result){
+	    document.getElementById("qDisp").appendChild(document.createElement("br"));
+	    for(var j=0; j<result.answers.length; j++){
+		var k=j+1;
+	    	var ansDisp = document.createTextNode(k+". "+result.answers[j].choice);
+	    	document.getElementById("qDisp").appendChild(ansDisp);
+		document.getElementById("qDisp").appendChild(document.createElement("br"));
+    }
+    });
     //if type==mcq
     //GET mcqAnswers
     //for i=0 i<mcqAnswers.length i++
@@ -859,8 +959,11 @@ function askQuestion(){
 
 //if user wants to cancel asking the question
 function cancel(){ //be able to cancel only if not started or it is stopped
-    if(startedQ==false&& stoppedQ==true)
+    if(startedQ==false&& stoppedQ==true){
 	document.getElementById("popup").style.display="none";
+	 }
+	else
+		alert("Quiz has not been stopped yet!");
 }
 
 //sending response to start projecting to apps
@@ -872,6 +975,14 @@ function startQ(){
                 success:function(){
                         console.log("Started question!");
 			startedQ=true;
+			document.getElementById("startQuestion").style.display="none";
+			document.getElementById("stopQuestion").style.display="block";
+			var btn=document.getElementById("answersRedirectButton");
+			btn.style.display="block";
+			if(currType=="picture")
+				btn.setAttribute("onclick", "displayImageAnsQuestionLoad('"+currTitle+"','"+ques+"','"+gID+"','"+currType+"');");
+			else
+				 btn.setAttribute("onclick", "displayAnsQuestionLoad('"+currTitle+"','"+ques+"','"+gID+"','"+currType+"');");
 		}
 	  });
 
@@ -888,6 +999,8 @@ function stopQ(){
                 	data:{started: 'false'},
                 	success:function(){
                         	console.log("Stopped question!");
+				document.getElementById("startQuestion").style.display="block";
+                        	document.getElementById("stopQuestion").style.display="none";
                         	startedQ=false;
 				document.getElementById("popup").style.display="none";
 				stoppedQ=true;
@@ -909,6 +1022,7 @@ function answeredLoad(){
     document.getElementById("addCourse").style.display="none";
     document.getElementById("courseMainPage").style.display="none";
     document.getElementById("students").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
     document.getElementById("addStudent").style.display="none";
     document.getElementById("tests").style.display="none";
     document.getElementById("testBank").style.display="none";
@@ -916,8 +1030,48 @@ function answeredLoad(){
     document.getElementById("displayQuestion").style.display="none";
     document.getElementById("studentAnswers").style.display="block";
     document.getElementById("displayAnsweredQuestion").style.display="none";
-    document.getElementById("displayImageAnsweredQuestion").style.display="none";  
+    document.getElementById("displayImageAnsweredQuestion").style.display="none"; 
+    var queryURL="https://coengage.online/API/courses/"+gCRN+"/quizzes";
+    jQuery.get(queryURL, function(result){
+            var container=document.getElementById("questionBankTable");
+            while(container.rows.length>0)
+                    container.deleteRow(0);
+            for(var i=0; i<result.length; i++){
+		    if(result[i].asked=='1'){
+                    var tRow = document.createElement("tr");
+                    var tData1 = document.createElement("td");
+                    var p1=document.createElement("p");
+	            if(result[i].question_type=="picture")
+		 	     p1.setAttribute("onclick", "displayImageAnsQuestionLoad('"+result[i].title+"','"+result[i].question+"','"+result[i].id+"','"+result[i].question_type+"');");
+	            else
+		            p1.setAttribute("onclick", "displayAnsQuestionLoad('"+result[i].title+"','"+result[i].question+"','"+result[i].id+"','"+result[i].question_type+"');");
+                    var info1=document.createTextNode(result[i].title);
+                    p1.appendChild(info1);
+                    tData1.appendChild(p1);
+                    tRow.appendChild(tData1);
+                    container.appendChild(tRow);
+            }
+		    else
+			    continue;
+	    }});
     //GET ALL ANSWERED QUESTIONS AND APPEND TO TABLE
+}
+
+function searchQuestionBank(){
+        var input, filter, table, tr, td, i;
+        input=document.getElementById("questionBankSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("questionBankTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1 || td===input)
+                                tr[i].style.display = "";
+                        else    
+                                tr[i].style.display = "none";
+                }
+        }
 }
 
 //Might not need this refer to testBankLoad
@@ -934,8 +1088,151 @@ function getAllAnsweredQuestions(){
     //append one by one to container table "questionBank" id="ansTestBank"
 }
 
-function displayAnsQuestionLoad(question){
+function sortStudentsAnsAlpha(colNum){
+    var tbl, rows, switching, i, x, y , should, dir, countSwitch=0;
+    tbl=document.getElementById("answeredRoster");
+    console.log("this is table name "+tbl);
+    switching=true;
+    dir="asc";
+    while(switching){
+        switching=false;
+        rows=tbl.getElementsByTagName("TR");
+        for(i=1; i<(rows.length-1); i++){
+            should = false;
+            x=rows[i].getElementsByTagName("TD")[colNum];
+            y=rows[i+1].getElementsByTagName("TD")[colNum];
+            console.log("for loop "+x+y);
+            if(dir=="asc"){
+                if(x.innerHTML.toLowerCase()>y.innerHTML.toLowerCase()){
+                    console.log("innerstufff "+x+" "+y);
+                    should=true;
+                    break;
+                }
+            }
+        }
+        if(should){
+            rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+            switching=true;
+            countSwitch++;
+        }
+        else{
+            if(countSwitch==0 && dir=="asc"){
+                dir="desc";
+                switching=true;
+            }
+        }
+    }
+}
+
+function sortStudentsAnsNum(colNum){
+    var tbl, rows, switching, i, x, y , should, dir, countSwitch=0;
+    tbl=document.getElementById("answeredRoster");
+    switching=true;
+    dir="asc";
+    while(switching){
+        switching=false;
+        rows=tbl.getElementsByTagName("TR");
+        for(i=1; i<(rows.length-1); i++){
+            should = false;
+            x=rows[i].getElementsByTagName("TD")[colNum];
+            y=rows[i+1].getElementsByTagName("TD")[colNum];
+            if(dir=="asc"){
+                if(Number(x.innerHTML) > Number(y.innerHTML)) {
+                    should=true;
+                    break;
+                }
+            }
+        }
+        if(should){
+            rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+            switching=true;
+            countSwitch++;
+        }
+        else{
+            if(countSwitch==0 && dir=="asc"){
+                dir="desc";
+                switching=true;
+            }
+        }
+    }
+}
+
+function searchStudentAns(){
+    var input, filter, table, tr, td, i, td1, td2, td3, td4;
+    input=document.getElementById("studentAnsSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("answeredRoster");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        td2 = tr[i].getElementsByTagName("td")[1];
+        td3 = tr[i].getElementsByTagName("td")[2];
+        if (td) {
+            if (td3.innerHTML.toUpperCase().indexOf(filter) > -1||td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            }
+            else if(Number(td2.innerHTML)==Number(filter)){
+                 tr[i].style.display = "";
+            }
+            else{
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+function displayAnsQuestionLoad(title, question, id, type){
+    document.getElementById("login").style.display="none";
+    document.getElementById("signupPage").style.display="none";
+    document.getElementById("main").style.display="none";
+    document.getElementById("sidebar").style.display="none";
+    document.getElementById("courseSidebar").style.display="none";
+    document.getElementById("addCourse").style.display="none";
+    document.getElementById("courseMainPage").style.display="none";
+    document.getElementById("students").style.display="none";
+    document.getElementById("addStudent").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
+    document.getElementById("tests").style.display="none";
+    document.getElementById("testBank").style.display="none";
+    document.getElementById("addQuestion").style.display="none";
+    document.getElementById("displayQuestion").style.display="none";
     document.getElementById("studentAnswers").style.display="none";
+    document.getElementById("displayAnsweredQuestion").style.display="block";
+    document.getElementById("displayImageAnsweredQuestion").style.display="none";     
+    var x=document.getElementById("AnsweredTitle");
+    x.textContent=title;
+    var qDisplay=document.createTextNode(question);
+    $('#qDispAns').empty();
+    document.getElementById("qDispAns").appendChild(qDisplay);
+    var queryURL="https://coengage.online/API/courses/"+gCRN+"/"+id+"/posts";
+    jQuery.get(queryURL,function(data, status){
+            if(status){
+                    var display= document.getElementById("answeredRoster");
+                    for(i=0; i<data.length;  i++)
+                        {
+			    for(var j=0; j<students.length; j++){
+				    if(data[i].id==students[j].id){
+					    var name=students[j].name;
+					    var id=students[j].id;
+                            var tRow = document.createElement("tr");
+ 	   var tData1 = document.createElement("td");
+ 	   var info1 = document.createTextNode(name);
+ 	   var tData2 = document.createElement("td");
+    var info2 = document.createTextNode(id);
+    var tData3 = document.createElement("td");
+    var info3 = document.createTextNode(answer);
+    tData1.appendChild(info1);
+    tData2.appendChild(info2);
+    tData3.appendChild(info3);
+    tRow.appendChild(tData1);
+    tRow.appendChild(tData2);
+    tRow.appendChild(tData3);
+    studentDisplay.appendChild(tRow);
+                        }
+                   }
+			}
+	    }
+    });
     //GET question type for question
     //if(type=="text" || type=="mcq"){
     //set header as question
@@ -946,4 +1243,7 @@ function displayAnsQuestionLoad(question){
     //GET all URL links, set img title to student name
     //append to div
     //document.getElementById("displayImageAnsweredQuestion").style.display="block";
+}
+
+function displayImageAnsQuestionLoad(title, question, id, type){
 }

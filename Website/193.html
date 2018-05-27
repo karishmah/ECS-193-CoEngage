@@ -120,14 +120,12 @@
             <button id="addStudentButton" class="navButton" style="margin-top:18px;" onclick="addStudentLoad();">Add a new student</button><br><br><br><br><br>
             <table class="roster" id="studentRosterTable">
                 <tr>
-                    <th onclick="sortStudentsAlpha(0);">First Name</th>
-                    <th onclick="sortStudentsAlpha(1);">Last Name</th>
-                    <th onclick="sortStudentsNum(2);">Student ID</th>
-                    <th onclick="sortStudentsAlpha(3);">Email</th>
-                    <th onclick="sortStudentsNum(4);">Quiz Grade</th>
+                    <th onclick="sortStudentsAlpha(0);">Name</th>
+                    <th onclick="sortStudentsNum(1);">Student ID</th>
+                    <th onclick="sortStudentsAlpha(2);">Email</th>
+                    <th onclick="sortStudentsNum(3);">Quiz Grade</th>
                 </tr>
                 <tr>
-                    <td>A</td>
                     <td>A</td>
                     <td>1</td>
                     <td>a@ucdavis.edu</td>
@@ -135,28 +133,24 @@
                 </tr>
                 <tr>
                     <td>B</td>
-                    <td>B</td>
                     <td>2</td>
                     <td>b@ucdavis.edu</td>
                     <td>91</td>
                 </tr>
                  <tr>
                     <td>A</td>
-                    <td>B</td>
                     <td>3</td>
                     <td>ab@ucdavis.edu</td>
                     <td>87</td>
                 </tr>
                 <tr>
                     <td>AA</td>
-                    <td>B</td>
                     <td>4</td>
                     <td>aab@ucdavis.edu</td>
                     <td>99</td>
                 </tr>
                 <tr>
                     <td>X</td>
-                    <td>Z</td>
                     <td>5</td>
                     <td>xz@ucdavis.edu</td>
                     <td>34</td>
@@ -301,16 +295,17 @@
         <div class="pages" id="displayQuestion" style="display:none;">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="questionTitle"></h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
-	    <br><br><br><br><br><br>
+	    <br><br><br>
 	    <div id="qDisp" class="formType">
 	    </div>
 	    <br><br><br>
             <button id="askQuestionButton" style="margin-left:450px;" class="submitButton" onclick="askQuestion();">Ask this question</button>
+	    <button id="answersRedirectButton" style="margin-left:450px; display:none;" class="submitButton">Go To Answers</button>
 	    <button class="submitButton" style="background-color:#C24146; margin-left: 450px;" onclick="deleteQuestion();">Delete Question</button>
             <div id="popup">
                 <div id="popupText">
-                    <button id="startQuestion" class="popupButton"  style="margin-top:375px; margin-left: 650px;" onclick="startQ();">Start</button>
-                    <button id="stopQuestion" class="popupButton"  onclick="stopQ();" style="margin-top: 375px; margin-left:850px;">Stop</button>
+                    <button id="startQuestion" class="popupButton"  style="margin-top:375px; margin-left: 800px;" onclick="startQ();">Start</button>
+                    <button id="stopQuestion" class="popupButton"  onclick="stopQ();" style="margin-top: 375px; display:none; margin-left:800px;">Stop</button>
                     <button id="cancelQuestion" onclick="cancel();" style=" position:absolute; top:0; right:0;" class="closebtn">&times;</button>
                 </div>
             </div>
@@ -320,13 +315,11 @@
         <div class="pages" id="studentAnswers" style="display:none;" onload="getAllAnsweredQuestions();">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Student Answers</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+            <input type="text" class="searchBar" style="margin-left:420px" id="questionBankSearch" onkeyup="searchQuestionBank();" placeholder="Search...">
+	    <br>
             <br>
             <br>
-            <br>
-            <table class="questionBank">
-                <tr><td><p onclick="displayAnsQuestionLoad('Question A');">Question A</p></td></tr>
-                <tr><td><p onclick="displayAnsQuestionLoad('Question B');">Question B</p></td></tr>
-                <tr><td><p onclick="displayAnsQuestionLoad('Question C');">Question C</p></td></tr>
+            <table class="questionBank" id="questionBankTable">
             </table>
         </div>
         
@@ -335,31 +328,22 @@
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="AnsweredTitle"></h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <br>
+	    <input type="text" class="searchBar" style="margin-left:420px" id="studentAnsSearch" onkeyup="searchStudentAns();" placeholder="Search...">
+	    <br>
+            <div id="qDispAns" class="formType">
+            </div>
             <table class="roster" id="answeredRoster">
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Student ID</th>
-                    <th>Answer</th>
-                </tr>
-                <tr>
-                    <td>A</td>
-                    <td>A</td>
-                    <td>1</td>
-                    <td>AA</td>
-                </tr>
-                <tr>
-                    <td>B</td>
-                    <td>B</td>
-                    <td>2</td>
-                    <td>BB</td>
+                    <th onclick="sortStudentsAnsAlpha(0);">Name</th>
+                    <th onclick="sortStudentsAnsNum(1);">Student ID</th>
+                    <th onclick="sortStudentsAnsAlpha(2);">Answer</th>
                 </tr>
             </table>
         </div>
         
 
         <div class="pages" id="displayImageAnsweredQuestion" style="display:none;">
-            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="AnsweredTitle"></h1>
+            <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="ImageAnsweredTitle"></h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <br>
         get all urls and student names and ID's, fill in as images

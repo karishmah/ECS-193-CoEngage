@@ -32,8 +32,8 @@ class QuizzesController < ApplicationController
 		if quiz_params[:started]
 			quiz.asked = true
 		end
-		if params[:choices]
-			for i in params[:choices]
+		if params[:answers]
+			for i in params[:answers]
 				puts i
 				quiz.answers.create!(:choice => i)
 			end
@@ -60,7 +60,7 @@ class QuizzesController < ApplicationController
 	private
 
 	def quiz_params
-		params.permit(:title, :question, :started, :question_type, :quiz_id, :course_id, :choices)
+		params.permit(:title, :question, :started, :question_type, :quiz_id, :course_id, :answers)
 	end
 
 	def set_course
