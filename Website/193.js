@@ -403,7 +403,7 @@ function courseStudents(){
     tData4.appendChild(info4);
     tData5.appendChild(info5);
     tRow.appendChild(tData1);
-    tRow.appendChild(tData2);
+    //tRow.appendChild(tData2);
     tRow.appendChild(tData3);
     tRow.appendChild(tData4);
     tRow.appendChild(tData5);
@@ -1185,7 +1185,7 @@ function displayAnsQuestionLoad(title, question, id, type){
     document.getElementById("login").style.display="none";
     document.getElementById("signupPage").style.display="none";
     document.getElementById("main").style.display="none";
-    document.getElementById("sidebar").style.display="none";
+    document.getElementById("sidebar").style.display="block";
     document.getElementById("courseSidebar").style.display="none";
     document.getElementById("addCourse").style.display="none";
     document.getElementById("courseMainPage").style.display="none";
@@ -1246,4 +1246,33 @@ function displayAnsQuestionLoad(title, question, id, type){
 }
 
 function displayImageAnsQuestionLoad(title, question, id, type){
+	document.getElementById("login").style.display="none";
+    document.getElementById("signupPage").style.display="none";
+    document.getElementById("main").style.display="none";
+    document.getElementById("sidebar").style.display="block";
+    document.getElementById("courseSidebar").style.display="none";
+    document.getElementById("addCourse").style.display="none";
+    document.getElementById("courseMainPage").style.display="none";
+    document.getElementById("students").style.display="none";
+    document.getElementById("addStudent").style.display="none";
+    document.getElementById("deleteStudent").style.display="none";
+    document.getElementById("tests").style.display="none";
+    document.getElementById("testBank").style.display="none";
+    document.getElementById("addQuestion").style.display="none";
+    document.getElementById("displayQuestion").style.display="none";
+    document.getElementById("studentAnswers").style.display="none";
+    document.getElementById("displayAnsweredQuestion").style.display="none";
+    document.getElementById("displayImageAnsweredQuestion").style.display="block";
+	 var x=document.getElementById("ImageAnsweredTitle");
+    x.textContent=title;
+    var qDisplay=document.createTextNode(question);
+    $('#qDispAns').empty();
+    document.getElementById("qDispAns").appendChild(qDisplay);
+    jQuery.get('https://coengage.online/API/courses/'+gCRN+'/quizzes/'+id+'/posts', function(result){
+	    console.log(result[0]);
+	    var img=document.createElement("img");
+	    img.setAttribute("src", result[0]);
+	    var container=document.getElementById("imageGallery");
+	    container.appendChild(img);
+    });
 }
