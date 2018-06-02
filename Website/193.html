@@ -40,7 +40,7 @@
                 <div class="loginCSS2">
                     <br><br>
 		    Email: &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <input type="text" pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" id="username">
-                    <br>
+		    <br>
                     Password:  <input type="password" id="password">
                     <br><br> 
                     <button id="signup" class="submitButton" onclick="signupLoad();"  style="width:100px;">Sign Up</button>
@@ -72,9 +72,10 @@
         <div class="pages" id="main" onload="mainLoad();" style="display:none";>
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Courses</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
-            <button id="addCourseButton" class="navButton" onclick="addCourseLoad();">Add a new course</button>
             <div class="flexContainer" id="courseMainContainer">
             </div>
+	    <br>
+	    <button id="addCourseButton" style="margin-left: 450px;" class="submitButton" onclick="addCourseLoad();">Add a new course</button>
         </div>
 
         
@@ -93,8 +94,8 @@
                 <br><br>
                 Add class roster
 		<br>
-                <input type="text" style="width:900px;" id="courseRoster">
-                <br>
+                <input type="file" name="files" style="width:900px;" id="courseRoster" onchange="handleFiles(this.files)">
+		<br><br>
                 <button class="submitButton" onclick="addCourseRedirect();">Submit</button>
             </div>
         </div>
@@ -117,18 +118,20 @@
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <br>
             <input type="text" class="searchBar" style="margin-left:420px" id="studentSearch" onkeyup="searchStudents();" placeholder="Search...">
-            <button id="addStudentButton" class="navButton" style="margin-top:18px;" onclick="addStudentLoad();">Add a new student</button><br><br><br><br><br>
-            <table class="roster" id="studentRosterTable">
+	    <br><br><br><br>
+	    <table class="roster" id="studentRosterTable">
                 <tr>
                     <th onclick="sortStudentsAlpha(0);">Name</th>
                     <th onclick="sortStudentsNum(1);">Student ID</th>
                     <th onclick="sortStudentsAlpha(2);">Email</th>
                     <th onclick="sortStudentsNum(3);">Quiz Grade</th>
                 </tr>
-                
+		<tbody id="studentRosterTableBody">
+		</tbody>
             </table>
 	    <br><br>
-	    <button class="submitButton" style="background-color:#C24146; margin-left:420px;" onclick="deleteStudentLoad();">Delete A Student</button>
+	    <button id="addStudentButton" style="margin-left: 420px;" class="submitButton" onclick="addStudentLoad();">Add a new student</button>
+	    <!---<button class="submitButton" style="background-color:#C24146; margin-left:420px;" onclick="deleteStudentLoad();">Delete A Student</button>-->
         </div>
         
 	<div class="pages" id="deleteStudent" style="display:none;">
@@ -144,7 +147,7 @@
                 <br>
                 <input type="text" style="width:900px;" id="delemail">
                 <br><br>
-                <button class="submitButton" style="background-color:#C24146" onclick="deleteStudentRedirect(); courseStudents();">Delete Student</button>
+       		<button class="submitButton" style="background-color:#C24146" onclick="deleteStudentRedirect(); courseStudents();">Delete Student</button>
             </div>
        </div>
 
@@ -158,10 +161,10 @@
                 <br>
                 <input type="text" style="width:900px;" id="firstName">
                 <br><br>
-                Last Name
+               <!--- Last Name
                 <br>
                 <input type="text" style="width:900px;" id="lastName">
-                <br><br>
+		<br><br>-->
                 Student ID
                 <br>
                 <input type="text" style="width:900px;" id="studentID">
@@ -190,7 +193,6 @@
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <br>
 	    <input type="text" class="searchBar" style="margin-left:420px" id="testBankSearch" onkeyup="searchTestBank();" placeholder="Search...">
-            <button id="addQuestionButton" class="navButton" onclick="addQuestionLoad();">Add a new question</button>
             <br>
             <br>
             <br>
@@ -198,6 +200,8 @@
             <br>
             <table id="testBankTable"  class="questionBank">
             </table>
+	    <br>
+	    <button id="addQuestionButton" style="margin-left: 420px;" class="submitButton" onclick="addQuestionLoad();">Add a new question</button>
         </div>
 
           
@@ -286,9 +290,11 @@
         <div class="pages" id="studentAnswers" style="display:none;" onload="getAllAnsweredQuestions();">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;">Student Answers</h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
+	    <br>
             <input type="text" class="searchBar" style="margin-left:420px" id="questionBankSearch" onkeyup="searchQuestionBank();" placeholder="Search...">
 	    <br>
             <br>
+	    <br><br>
             <br>
             <table class="questionBank" id="questionBankTable">
             </table>
@@ -298,17 +304,21 @@
         <div class="pages" id="displayAnsweredQuestion" style="display:none;">
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="AnsweredTitle"></h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
-            <br>
-	    <input type="text" class="searchBar" style="margin-left:420px" id="studentAnsSearch" onkeyup="searchStudentAns();" placeholder="Search...">
-	    <br>
-            <div id="qDispAns" class="formType">
+	    <br><br>
+	    <div id="qDispAns" class="formType">
             </div>
+	    <br><br>
+	    <input type="text" class="searchBar" style="margin-left:420px" id="studentAnsSearch" onkeyup="searchStudentAns();" placeholder="Search...">
+	    <br><br><br><br><br><br>
             <table class="roster" id="answeredRoster">
                 <tr>
                     <th onclick="sortStudentsAnsAlpha(0);">Name</th>
                     <th onclick="sortStudentsAnsNum(1);">Student ID</th>
                     <th onclick="sortStudentsAnsAlpha(2);">Answer</th>
                 </tr>
+		<tbody id="answeredRosterBody">
+	
+		</tbody>
             </table>
         </div>
         
@@ -317,8 +327,24 @@
             <h1 style="margin-left: 410px; margin-top: 80px; font-size: 45px;" id="ImageAnsweredTitle"></h1>
             <hr class="w3-round" style="margin-left: 412px; width:50px; border:5px solid #5DBCD2;">
             <br>
-	    <div id="qDispAns" class="formType">
-            <div class="formType" id="imageGallery">
+	    <div id="qDispAnsImage" class="formType"></div>
+	    <br><br>
+	    <div style="margin-left:420px;" class="w3-row-padding" id="imageGallery">
+      <!---<img src="/Users/akanksha/Downloads/193/Website193/image1.jpg" style="width:275px; height=275px" onclick="onClickImage(this)" alt="A A, 1">&nbsp;
+      <img src="/Users/akanksha/Downloads/193/Website193/image3.jpg" style="width:275px; height=275px" onclick="onClickImage(this)" alt="C C, 3">&nbsp;
+      <img src="/Users/akanksha/Downloads/193/Website193/image3.jpg" style="width:275px; height=275px" onclick="onClickImage(this)" alt="C C, 3">&nbsp;
+      <img src="/Users/akanksha/Downloads/193/Website193/image3.jpg" style="width:275px; height=275px" onclick="onClickImage(this)" alt="C C, 3">&nbsp;
+      <img src="/Users/akanksha/Downloads/193/Website193/image3.jpg" style="width:275px; height=275px" onclick="onClickImage(this)" alt="C C, 3">&nbsp;
+  	-->
+      </div>
+  <div id="modal01" class="w3-modal w3-black" style="padding-top:0" onclick="this.style.display='none'">
+    <span class="w3-button w3-black w3-xxlarge w3-display-topright">×</span>
+    <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
+      <img id="img01" class="w3-image">
+      <p id="caption"></p>
+    </div>
+  </div>
+            <div class="formType" id="imageGallery1">
             </div>
         </div>
 

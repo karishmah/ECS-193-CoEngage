@@ -38,7 +38,8 @@ RSpec.describe 'Courses API', type: :request do
 				let (:valid_credentials) do 
 					{
 						course_id: course_id,
-						email: student.email
+						email: student.email,
+						sid: student.sid
 						
 					}.to_json
 				end

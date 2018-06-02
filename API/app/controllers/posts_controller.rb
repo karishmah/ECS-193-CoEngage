@@ -8,12 +8,14 @@ class PostsController < ApplicationController
 	# GET    /courses/:course_id/quizzes/:quiz_id/posts
 	def index
 		#TODO Add student info to return
-		if @quiz.question_type = "picture"
+		if @quiz.question_type == "picture"
 			urls = []
 			for post in @quiz.posts do
 				post_path = "Photos/#{request.fullpath[ 1 .. request.fullpath.length - 1]}/#{post.id}"
 				obj = @static_storage_bucket.object(post_path)
+
 				url = URI.parse(obj.presigned_url(:get))
+
 				urls << url
 			end
 			json_response(urls)
@@ -39,7 +41,6 @@ class PostsController < ApplicationController
 	def create
 		if @quiz.started
 			begin
-
 			post = @quiz.posts.find_by(student_id: @current_user.id) if @quiz
 				if post
 					#do not use post.update(post_params)
@@ -62,8 +63,7 @@ class PostsController < ApplicationController
 					#sw3 connection code
 				post_path = "Photos/#{request.fullpath[ 1 .. request.fullpath.length - 1]}/#{post.id}"
 				obj = @static_storage_bucket.object(post_path)
-					puts post_path
-					url = URI.parse(obj.presigned_url(:put))
+				url = URI.parse(obj.presigned_url(:put))
 
 				json_response(url, :created)
 			else
